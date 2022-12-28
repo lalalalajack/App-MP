@@ -1,0 +1,15 @@
+<!--
+ * @Author: cwj
+ * @Date: 2022-12-13 14:41:49
+ * @LastEditors: cwj
+ * @LastEditTime: 2022-12-21 04:38:33
+ * @Introduce: 
+--> 
+<div class="mp-slider" #mpSlider [class.mp-slider-vertical]="mpVertical">
+    <!-- 进度条 -->
+    <app-mp-slider-track [mpVertical]="mpVertical" [mpLength]="bufferOffset" [mpBuffer]="true"></app-mp-slider-track>
+    <!-- 缓冲条 -->
+    <app-mp-slider-track [mpVertical]="mpVertical" [mpLength]="offset" ></app-mp-slider-track>
+    <!-- 圆形滑块按钮 -->
+    <app-mp-slider-handle [mpVertical]="mpVertical" [mpOffset]="offset">   </app-mp-slider-handle>
+</div>

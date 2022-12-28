@@ -1,0 +1,75 @@
+<!--
+ * @Author: cwj
+ * @Date: 2022-12-11 22:42:31
+ * @LastEditors: cwj
+ * @LastEditTime: 2022-12-22 22:27:22
+ * @Introduce: 
+-->
+<div class="m-player" (click)="selfClick=true">
+    <div class="lock">
+        <div class="left"><i></i></div>
+    </div>
+    <div class="hand"></div>
+    <div class="container">
+        <div class="wrap">
+
+            <!-- 按钮 -->
+            <div class="btns">
+                <i class="prev" (click)="onPrev(currentIndex-1)"></i>
+                <i class="toggle" [class.playing]="playing" (click)="onToggle()"></i>
+                <i class="next" (click)="onNext(currentIndex+1)"></i>
+            </div>
+            <!-- 小图片 -->
+            <div class="head">
+                <img [src]="picUrl" alt="">
+                <i class="mask"></i>
+            </div>
+
+            <div class="play">
+                <!-- 歌曲和歌手名字 -->
+                <div class="words clearfix ">
+                    <p class="ellipsis margin-bottom-none">{{currentSong?.name}}</p>
+                    <ul class="songs clearfix margin-bottom-none">
+                        <li *ngFor="let item of currentSong?.ar;last as isLast">
+                            <a>{{item.name}}</a>
+                            <span [hidden]="isLast">/</span>
+                        </li>
+                    </ul>
+                </div>
+                <!-- 进度条 -->
+                <div class="bar">
+                    <div class="slider-wrap">
+                        <app-mp-slider [bufferOffset]="bufferPercent" [(ngModel)]="percent"
+                            (mpOnAfterChange)="onPercentChange($event)"></app-mp-slider>
+                    </div>
+                    <span class="time">
+                        <em>{{currentTime | formatTime}}</em>/{{duration | formatTime}}
+                    </span>
+                </div>
+            </div>
+
+            <!-- 右侧小图标 -->
+            <div class="oper">
+                <i class="like" title="收藏"></i>
+                <i class="share" title="分享"></i>
+            </div>
+            <div class="ctrl">
+                <i class="volume" title="音量" (click)="toggleVolPanel()"></i>
+                <i [ngClass]="currentMode.type" [title]="currentMode.label" (click)="changeMode()"></i>
+                <!-- 展开播放面板的按钮 -->
+                <p class="open">
+                    <span></span>
+                </p>
+                <!-- 音量控制 -->
+                <div class="control-vol" [hidden]="!showVolumePanel">
+                    <app-mp-slider [mpVertical]="true" [(ngModel)]="volume"
+                        (ngModelChange)="onVolumeChange($event)"></app-mp-slider>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 开始时没有音乐在放，可选参数 -->
+    <audio #audio [src]="currentSong?.url" (canplay)="onCanplay()" (timeupdate)="OnTimeUpdate($event)" (ended)="onEnded()">
+
+    </audio>
+</div>
