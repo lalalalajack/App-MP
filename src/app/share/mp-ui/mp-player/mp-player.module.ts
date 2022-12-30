@@ -11,13 +11,15 @@ import { MpPlayerComponent } from './mp-player.component';
 import { MpSliderModule } from '../mp-slider/mp-slider.module';
 import { FormsModule } from '@angular/forms';
 import { FormatTimePipe } from '../../pipes/format-time.pipe';
+import { MpPlayerPanelComponent } from './mp-player-panel/mp-player-panel.component';
 
 
 
 @NgModule({
     declarations: [
         MpPlayerComponent,
-        FormatTimePipe
+        FormatTimePipe,
+        MpPlayerPanelComponent
     ],
     exports: [
         MpPlayerComponent,

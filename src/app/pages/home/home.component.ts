@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-09 21:25:06
  * @LastEditors: cwj
- * @LastEditTime: 2022-12-22 22:21:30
+ * @LastEditTime: 2022-12-31 03:30:15
  * @Introduce: 
  */
 import { Component, OnInit, ViewChild } from '@angular/core';
@@ -97,8 +97,8 @@ export class HomeComponent implements OnInit {
     console.log("id:", id);
     this.SheetService.playSheet(id).subscribe(list => {
       //console.log("res",res);
-      this.store$.dispatch(SetSongList({ songList: list.slice(0,3) }));
-      this.store$.dispatch(SetPlayList({ playList: list.slice(0,3) }));
+      this.store$.dispatch(SetSongList({ songList: list }));
+      this.store$.dispatch(SetPlayList({ playList: list }));
       this.store$.dispatch(SetCurrentIndex({ currentIndex: 0 }));
 
     })

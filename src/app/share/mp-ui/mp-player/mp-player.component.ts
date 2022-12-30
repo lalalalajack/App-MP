@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-11 22:42:31
  * @LastEditors: cwj
- * @LastEditTime: 2022-12-22 22:30:49
+ * @LastEditTime: 2022-12-31 05:11:19
  * @Introduce: 
  */
 import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
@@ -68,6 +68,9 @@ export class MpPlayerComponent implements OnInit {
   //当前模式
   currentMode: PlayMode;
   modeCount = 0;
+
+  //是否显示列表面板
+  showListPanel: boolean = false;
 
   @ViewChild('audio', { static: true }) private audio: ElementRef;
   private audioEl: HTMLAudioElement;
@@ -163,36 +166,52 @@ export class MpPlayerComponent implements OnInit {
     this.store$.dispatch(SetPlayMode({ playMode: modeTypes[++this.modeCount % 3] }))
   }
 
+  //点击切换列表面板的显示
+  toggleListPanel() {
+    //有歌的时候才显示这块面板
+    if (this.songList.length)
+      this.togglePanel('showListPanel');
+  }
+
   //点击切换音量面板的显示
   toggleVolPanel() {
-    this.togglePanel();
+    this.togglePanel('showVolumePanel');
   }
-  togglePanel() {
-    this.showVolumePanel = !this.showVolumePanel;
-    if (this.showVolumePanel) { //如果音量面板存在，绑定一个全局click事件
-      this.bindDocumentClickListener();
+
+  togglePanel(type: string) {
+    //动态变量的方式来访问this对象属性
+    this[type] = !this[type];
+    if (this.showVolumePanel || this.showListPanel) { //如果音量或者列表面板存在，绑定一个全局click事件（点击外侧消失面板）
+      this.bindDocumentClickListener(type);
     } else {
-      this.unbindDocumentClickListener();
+      this.unbindDocumentClickListener(type);
     }
   }
-  bindDocumentClickListener() {
+
+  bindDocumentClickListener(type: string) {
     if (!this.winClick) {
       this.winClick = fromEvent(this.doc, 'click').subscribe(() => {
-        if (!this.selfClick) { //即点击了播放器除了音量控制面板以外的部分
+        if (!this.selfClick) { //即点击了播放器除了控制面板以外的部分
           //此时隐藏面板
-          this.showVolumePanel = false;
+          this[type] = false;
           //此时解绑事件
-          this.unbindDocumentClickListener();
+          this.unbindDocumentClickListener(type);
         }
         this.selfClick = false;
       });
     }
   }
-  unbindDocumentClickListener() {
+  unbindDocumentClickListener(type: string) {
     if (this.winClick) {
       this.winClick.unsubscribe();
       this.winClick = null;
     }
+  }
+
+  //列表更改歌曲
+  onChangeSong(song:Song) {
+    //this.currentSong = song;
+    this.updateCurrentIndex(this.playList,song);
   }
 
 

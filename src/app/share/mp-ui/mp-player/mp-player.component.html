@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-11 22:42:31
  * @LastEditors: cwj
- * @LastEditTime: 2022-12-22 22:27:22
+ * @LastEditTime: 2022-12-31 05:05:26
  * @Introduce: 
 -->
 <div class="m-player" (click)="selfClick=true">
@@ -57,7 +57,7 @@
                 <i class="volume" title="音量" (click)="toggleVolPanel()"></i>
                 <i [ngClass]="currentMode.type" [title]="currentMode.label" (click)="changeMode()"></i>
                 <!-- 展开播放面板的按钮 -->
-                <p class="open">
+                <p class="open" (click)="toggleListPanel()">
                     <span></span>
                 </p>
                 <!-- 音量控制 -->
@@ -66,10 +66,20 @@
                         (ngModelChange)="onVolumeChange($event)"></app-mp-slider>
                 </div>
             </div>
+            <!-- 音乐面板 -->
+            <!-- 父指令通过事件绑定 (eventName) 的方式监听该事件，如下的（onClose)，并通过 $event 对象来获取 payload 对象,下面的是监听子组件的事件的发生后，为showListPanel赋值 -->
+            <app-mp-player-panel 
+            [songList]="songList" 
+            [currentSong]="currentSong" [currentIndex]="currentIndex"
+            [show]="showListPanel" 
+            (onClose)="showListPanel=false"
+            (onChangeSong)="onChangeSong($event)"
+            ></app-mp-player-panel>
         </div>
     </div>
     <!-- 开始时没有音乐在放，可选参数 -->
-    <audio #audio [src]="currentSong?.url" (canplay)="onCanplay()" (timeupdate)="OnTimeUpdate($event)" (ended)="onEnded()">
+    <audio #audio [src]="currentSong?.url" (canplay)="onCanplay()" (timeupdate)="OnTimeUpdate($event)"
+        (ended)="onEnded()">
 
     </audio>
 </div>
