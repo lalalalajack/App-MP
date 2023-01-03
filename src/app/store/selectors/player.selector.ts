@@ -2,14 +2,13 @@
  * @Author: cwj
  * @Date: 2022-12-22 10:25:15
  * @LastEditors: cwj
- * @LastEditTime: 2022-12-22 16:24:28
+ * @LastEditTime: 2023-01-04 01:08:54
  * @Introduce: 
  */
 
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { PlayState } from "../reducers/player.reducer";
-
- 
+// 声明各个动作
 const selectPlayerStates = (state: PlayState) => state;
 export const getPlayer = createFeatureSelector<PlayState>('player');
 export const getPlaying = createSelector(selectPlayerStates, (state: PlayState) => state.playing);

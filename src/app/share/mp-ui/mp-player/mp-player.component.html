@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-11 22:42:31
  * @LastEditors: cwj
- * @LastEditTime: 2022-12-31 05:05:26
+ * @LastEditTime: 2023-01-04 00:12:57
  * @Introduce: 
 -->
 <div class="m-player" (click)="selfClick=true">
@@ -70,7 +70,7 @@
             <!-- 父指令通过事件绑定 (eventName) 的方式监听该事件，如下的（onClose)，并通过 $event 对象来获取 payload 对象,下面的是监听子组件的事件的发生后，为showListPanel赋值 -->
             <app-mp-player-panel 
             [songList]="songList" 
-            [currentSong]="currentSong" [currentIndex]="currentIndex"
+            [currentSong]="currentSong" 
             [show]="showListPanel" 
             (onClose)="showListPanel=false"
             (onChangeSong)="onChangeSong($event)"

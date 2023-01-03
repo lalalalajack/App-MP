@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-09 21:25:06
  * @LastEditors: cwj
- * @LastEditTime: 2022-12-31 03:30:15
+ * @LastEditTime: 2023-01-04 01:11:58
  * @Introduce: 
  */
 import { Component, OnInit, ViewChild } from '@angular/core';
@@ -13,9 +13,12 @@ import { NzCarouselComponent } from 'ng-zorro-antd/carousel';
 import { map } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { SheetService } from 'src/app/services/sheet.service';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppStoreModule } from 'src/app/store';
 import { SetCurrentIndex, SetPlayList, SetSongList } from 'src/app/store/actions/player.action';
+import { PlayState } from 'src/app/store/reducers/player.reducer';
+import { getPlayer } from 'src/app/store/selectors/player.selector';
+import { findIndex, shuffle } from 'src/app/utils/array';
 
 @Component({
   selector: 'app-home',
@@ -29,6 +32,8 @@ export class HomeComponent implements OnInit {
   hotTags: HotTag[];
   songSheetsList: SongSheet[];
   singer: Singer[];
+
+  private playState:PlayState;
 
   @ViewChild(NzCarouselComponent, { static: true }) private nzCarousel: NzCarouselComponent;
 
@@ -48,10 +53,12 @@ export class HomeComponent implements OnInit {
       this.songSheetsList = sheets;
       this.singer = singer;
     });
+
+    this.store$.pipe(select(getPlayer)).subscribe(res=>this.playState=<PlayState>res);
     // this.getBanners();
     // this.getHotTags();
     // this.getPersonalSheetList(); 
-    // this.getEnterSinger();
+    // this.getEnterSinger ();
   }
 
   // getBanners() {
@@ -98,10 +105,16 @@ export class HomeComponent implements OnInit {
     this.SheetService.playSheet(id).subscribe(list => {
       //console.log("res",res);
       this.store$.dispatch(SetSongList({ songList: list }));
-      this.store$.dispatch(SetPlayList({ playList: list }));
-      this.store$.dispatch(SetCurrentIndex({ currentIndex: 0 }));
+      //首页初始化时先订阅当前播放信息，在点击播放歌单时判断当前播放模式是否为随机，是则打乱歌单数组，重新计算当前歌曲的索引。
+      let trueIndex = 0, trueList = list.slice();
+      if (this.playState.playMode.type === "random") {
+          trueList = shuffle(list || []);
+          trueIndex = findIndex(trueList, list[trueIndex]);
+      }
 
-    })
+      this.store$.dispatch(SetPlayList({ playList: trueList }));
+      this.store$.dispatch(SetCurrentIndex({ currentIndex: trueIndex }));
+    }) 
   }
 
 }

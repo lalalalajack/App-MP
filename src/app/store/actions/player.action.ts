@@ -2,8 +2,8 @@
  * @Author: cwj
  * @Date: 2022-12-22 09:56:18
  * @LastEditors: cwj
- * @LastEditTime: 2022-12-22 16:27:18
- * @Introduce: 
+ * @LastEditTime: 2023-01-04 01:06:45
+ * @Introduce: // 设置动作;在Redux规范中，所有的会引发状态更新的交互行为都必须通过一个显性定义的Action来进行。(Reducer和Store之间的通信靠Action)
  */
 import { createAction, props } from "@ngrx/store";
 import { Song } from "src/app/services/data-types/common.types";

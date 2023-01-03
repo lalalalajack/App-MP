@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-11 22:42:31
  * @LastEditors: cwj
- * @LastEditTime: 2022-12-31 05:11:19
+ * @LastEditTime: 2023-01-04 00:18:25
  * @Introduce: 
  */
 import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
@@ -14,7 +14,7 @@ import { PlayMode } from './player-type';
 import { SetCurrentIndex, SetPlayList, SetPlayMode } from 'src/app/store/actions/player.action';
 import { Subscription, from, fromEvent } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
-import { shuffle } from 'src/app/utils/array';
+import { findIndex, shuffle } from 'src/app/utils/array';
 
 const modeTypes: PlayMode[] = [{
   type: 'loop',
@@ -54,7 +54,7 @@ export class MpPlayerComponent implements OnInit {
   songReady = false;
 
   //音量
-  volume = 60;
+  volume = 10;
 
   //是否显示音量面板
   showVolumePanel: boolean = false;
@@ -155,7 +155,8 @@ export class MpPlayerComponent implements OnInit {
   //更新当前在播放的歌的index
   private updateCurrentIndex(list: Song[], song: Song) {
     //寻找当前正在播放的歌在shuffle后的index
-    const newIndex = list.findIndex(item => item.id === song.id);
+    //const newIndex = list.findIndex(item => item.id === song.id); 
+    const newIndex = findIndex(list,song); 
     this.store$.dispatch(SetCurrentIndex({ currentIndex: newIndex }));
   }
 
@@ -295,9 +296,6 @@ export class MpPlayerComponent implements OnInit {
   private loop() {
     this.audioEl.currentTime = 0;
     this.play();
-    // if (this.playerPanel) {
-    //   this.playerPanel.seekLyric(0);
-    // }
   }
 
 
