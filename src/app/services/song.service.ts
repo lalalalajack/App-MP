@@ -2,13 +2,13 @@
  * @Author: cwj
  * @Date: 2022-12-12 18:15:29
  * @LastEditors: cwj
- * @LastEditTime: 2022-12-13 17:24:41
+ * @LastEditTime: 2023-01-19 00:45:30
  * @Introduce: 
  */
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { from, map, observable, Observable } from 'rxjs';
-import { Song, SongSheet, SongUrl } from './data-types/common.types';
+import { Lyric, Song, SongSheet, SongUrl } from './data-types/common.types';
 import { API_CONFIG, ServicesModule } from './services.module';
 
 @Injectable({
@@ -62,5 +62,20 @@ export class SongService {
       return url ? { ...song, url } : song;
     });
   }
+
+  // 根据ID获取歌曲歌词
+  getLyric(id: number): Observable<Lyric> {
+    const params = new HttpParams().set('id', id.toString());
+    //过滤得出需要的两个对象
+    return this.http.get(this.uri + 'lyric', { params })
+      .pipe(map(res => {
+        return {
+          lyric: res['lrc'].lyric,
+          tlyric: res['tlyric'].lyric,
+        }
+      }))
+  }
+
+
 
 }

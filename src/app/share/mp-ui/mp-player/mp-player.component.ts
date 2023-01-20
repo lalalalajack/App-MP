@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-11 22:42:31
  * @LastEditors: cwj
- * @LastEditTime: 2023-01-04 00:18:25
+ * @LastEditTime: 2023-01-18 23:38:01
  * @Introduce: 
  */
 import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
@@ -122,7 +122,7 @@ export class MpPlayerComponent implements OnInit {
     console.log('song:', this.currentSong);
   }
   private watchPlayMode(mode: PlayMode) {
-    console.log('mode:', mode);
+    //console.log('mode:', mode);
     this.currentMode = mode;
     if (this.songList) {
       //避免引用问题，复制一个list

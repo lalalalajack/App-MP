@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-31 02:59:41
  * @LastEditors: cwj
- * @LastEditTime: 2023-01-04 01:23:22
+ * @LastEditTime: 2023-01-21 04:14:07
  * @Introduce: 
  */
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
@@ -11,6 +11,8 @@ import { Song } from 'src/app/services/data-types/common.types';
 import { MpScrollComponent } from '../mp-scroll/mp-scroll.component';
 import { findIndex } from 'src/app/utils/array';
 import { timer } from 'rxjs';
+import { SongService } from 'src/app/services/song.service';
+import { BaseLyricLine, MpLyric } from './mp-lyric';
 
 @Component({
   selector: 'app-mp-player-panel',
@@ -32,10 +34,12 @@ export class MpPlayerPanelComponent implements OnInit, OnChanges {
 
   scrollY = 0;
 
+  currentLyric:BaseLyricLine[];
+
   //后续两个面板都需要
   @ViewChildren(MpScrollComponent) private mpScroll: QueryList<MpScrollComponent>
 
-  constructor() { }
+  constructor(private songServe:SongService) { }
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['songList']) {
       //console.log('songList:', this.songList);
@@ -47,6 +51,7 @@ export class MpPlayerPanelComponent implements OnInit, OnChanges {
       if (this.currentSong) {
         this.currentIndex = findIndex(this.songList, this.currentSong);
         //this.currentIndex =  this.songList.findIndex(item => item.id===this.currentSong.id);
+        this.updateLyric();
         if (this.show) {
           this.scrollCurrent();
         }
@@ -61,10 +66,11 @@ export class MpPlayerPanelComponent implements OnInit, OnChanges {
         //first代表多个mpScroll事件中的第一个
         //console.log('mpScroll:',this.mpScroll);
         this.mpScroll.first.refreshScroll();
+        this.mpScroll.last.refreshScroll();
         // setTimeout(() => {
         //   if (this.currentSong) {
         //     this.scrollCurrent(0);
-        //   }
+        //   }` 
         // }, 80)
         //将原生的setTimeout()替换为rxjs的timer
         timer(80).subscribe(() => {
@@ -76,7 +82,15 @@ export class MpPlayerPanelComponent implements OnInit, OnChanges {
       //console.log('currentIndex:', this.currentIndex);
     }
   }
-  scrollCurrent(speed = 300) {
+  private updateLyric() {
+    this.songServe.getLyric(this.currentSong.id).subscribe(res=>{
+      // console.log('res',res);
+      const lyric = new MpLyric(res);
+      this.currentLyric = lyric.lines;
+      console.log('currentLyric:',this.currentLyric);
+    });
+  }
+  private scrollCurrent(speed = 300) {
     //获取mpScroll组件的实例容器下的DOM
     const songListRefs = this.mpScroll.first.el.nativeElement.querySelectorAll('ul li')
     //console.log('songListRefs:',songListRefs);
@@ -85,9 +99,9 @@ export class MpPlayerPanelComponent implements OnInit, OnChanges {
       const currentLi = <HTMLElement>songListRefs[this.currentIndex || 0];
       const offsetTop = currentLi.offsetTop;
       const offsetHeight = currentLi.offsetHeight;
-      console.log('scrollY', this.scrollY);
-      console.log('offsetTop', offsetTop);
-      console.log('offsetHeight', offsetHeight);
+      //console.log('scrollY', this.scrollY);
+      //console.log('offsetTop', offsetTop);
+      //console.log('offsetHeight', offsetHeight);
       //判断当前歌曲是否在可视范围内，如果在就不需要调整滚动条。当歌曲节点距离顶部的偏移量（offset）与滚动条的Y轴偏移量（scrollY）的差大于面板的轴体的显示量(offsetHeight*6)时，表示不在可视范围内
       //或者当歌曲节点距离顶部的偏移量（offset）小于动条的Y轴偏移量（scrollY），也不在可视范围内
       if ((offsetTop - Math.abs(this.scrollY)) > offsetHeight * 5 || offsetTop < Math.abs(this.scrollY)) {

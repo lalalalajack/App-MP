@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-31 02:59:41
  * @LastEditors: cwj
- * @LastEditTime: 2023-01-03 22:29:49
+ * @LastEditTime: 2023-01-21 04:08:57
  * @Introduce: 
 -->
 <div class="play-panel" [class.show]="show">
@@ -21,7 +21,7 @@
             <!-- 子指令调用已创建的 EventEmitter 实例中的 emit(payload) 方法来触发一个事件 -->
             <i class="icon close" (click)="onClose.emit()"></i>
         </div>
-      </div>
+    </div>
 
     <!-- 列表 -->
     <div class="bd">
@@ -29,7 +29,8 @@
         <div class="msk"></div>
         <app-mp-scroll class="list-wrap" [data]="songList" (onScrollEnd)="scrollY = $event">
             <ul>
-                <li *ngFor="let item of songList; index as i" [class.current]="currentIndex===i" (click)="onChangeSong.emit(item)">
+                <li *ngFor="let item of songList; index as i" [class.current]="currentIndex===i"
+                    (click)="onChangeSong.emit(item)">
                     <i class="col arrow"></i>
                     <div class="col name ellipsis">{{item.name}}</div>
                     <div class="col icons">
@@ -48,8 +49,14 @@
                 </li>
             </ul>
         </app-mp-scroll>
-        <ul>
-            歌词
-        </ul>
+
+        <app-mp-scroll class="list-lyric">
+            <ul>
+                <li *ngFor="let item of currentLyric">
+                    {{item.txt}}<br/>{{item.txtCn}}
+                </li>
+            </ul>
+        </app-mp-scroll>
+
     </div>
 </div>
