@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-31 02:59:41
  * @LastEditors: cwj
- * @LastEditTime: 2023-01-21 12:02:14
+ * @LastEditTime: 2023-01-31 23:16:29
  * @Introduce: 
 -->
 <div class="play-panel" [class.show]="show">
@@ -15,7 +15,7 @@
             </div>
             <span class="line"></span>
             <div class="clear-all">
-                <i class="icon trush" title="清除"></i>清除
+                <i class="icon trush" title="清除全部" (click)="onClearSong.emit()"></i>清除全部
             </div>
             <p class="playing-name">{{currentSong?.name}}</p>
             <!-- 子指令调用已创建的 EventEmitter 实例中的 emit(payload) 方法来触发一个事件 -->
@@ -36,7 +36,7 @@
                     <div class="col icons">
                         <i class="ico like" title="收藏全部"></i>
                         <i class="ico share" title="分享"></i>
-                        <i class="ico trush" title="删除"></i>
+                        <i class="ico trush" title="删除" (click)="onDeleteSong.emit(item)"></i>
                     </div>
                     <div class="singers clearfix ellipsis">
                         <div class="singer-item" *ngFor="let singer of item.ar;last as isLast">
@@ -53,7 +53,7 @@
         <app-mp-scroll class="list-lyric" [data]="currentLyric">
             <ul>
                 <li *ngFor="let item of currentLyric;index as i" [class.current]="currentLineNum===i">
-                    {{item.txt}}<br/>{{item.txtCn}}
+                    {{item.txt}}<br />{{item.txtCn}}
                 </li>
             </ul>
         </app-mp-scroll>

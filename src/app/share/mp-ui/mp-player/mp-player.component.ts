@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-11 22:42:31
  * @LastEditors: cwj
- * @LastEditTime: 2023-01-21 11:58:24
+ * @LastEditTime: 2023-01-31 23:32:55
  * @Introduce: 
  */
 import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
@@ -11,12 +11,14 @@ import { Song } from 'src/app/services/data-types/common.types';
 import { AppStoreModule } from 'src/app/store';
 import { getCurrentIndex, getCurrentSong, getPlayList, getPlayMode, getPlayer, getSongList } from 'src/app/store/selectors/player.selector';
 import { PlayMode } from './player-type';
-import { SetCurrentIndex, SetPlayList, SetPlayMode } from 'src/app/store/actions/player.action';
+import { SetCurrentIndex, SetPlayList, SetPlayMode, SetSongList } from 'src/app/store/actions/player.action';
 import { Subscription, from, fromEvent } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
 import { findIndex, shuffle } from 'src/app/utils/array';
 import { MpPlayerPanelComponent } from './mp-player-panel/mp-player-panel.component';
 import { flush } from '@angular/core/testing';
+import { NzModalService } from 'ng-zorro-antd/modal';
+
 
 const modeTypes: PlayMode[] = [{
   type: 'loop',
@@ -81,7 +83,8 @@ export class MpPlayerComponent implements OnInit {
 
   constructor(
     private store$: Store<AppStoreModule>,
-    @Inject(DOCUMENT) private doc: Document
+    @Inject(DOCUMENT) private doc: Document,
+    private nzModalServe: NzModalService
   ) {
     const appStore$ = this.store$.pipe(select(getPlayer));
     //select操作符非原生，是ngrx携带的
@@ -159,7 +162,7 @@ export class MpPlayerComponent implements OnInit {
   private updateCurrentIndex(list: Song[], song: Song) {
     //寻找当前正在播放的歌在shuffle后的index
     //const newIndex = list.findIndex(item => item.id === song.id); 
-    const newIndex = findIndex(list,song); 
+    const newIndex = findIndex(list, song);
     this.store$.dispatch(SetCurrentIndex({ currentIndex: newIndex }));
   }
 
@@ -213,9 +216,9 @@ export class MpPlayerComponent implements OnInit {
   }
 
   //列表更改歌曲
-  onChangeSong(song:Song) {
+  onChangeSong(song: Song) {
     //this.currentSong = song;
-    this.updateCurrentIndex(this.playList,song);
+    this.updateCurrentIndex(this.playList, song);
   }
 
 
@@ -337,4 +340,36 @@ export class MpPlayerComponent implements OnInit {
     return this.currentSong ? this.currentSong.al.picUrl : null;
   }
 
+  //删除歌曲
+  onDeleteSong(song: Song) {
+    const songList = this.songList.slice();
+    const playList = this.playList.slice();
+    let currentIndex = this.currentIndex;
+    //找到歌曲在songList和playList里面的索引
+    const sIndex = findIndex(songList, song);
+    songList.splice(sIndex, 1);
+    const pIndex = findIndex(playList, song);
+    playList.splice(pIndex, 1);
+    //当前播放的歌曲大于要删除的歌曲的下标，以及当前播放的歌曲就是最后一首歌
+    if (currentIndex > pIndex || currentIndex === playList.length) {
+      currentIndex--;
+    }
+
+    this.store$.dispatch(SetSongList({ songList }));
+    this.store$.dispatch(SetPlayList({ playList }));
+    this.store$.dispatch(SetCurrentIndex({ currentIndex }));
+  }
+
+  //清空歌曲(为了防止误操作，使用ngzorro的组件)
+   // 清空歌曲
+   onClearSong () {
+    this.nzModalServe.confirm({
+        nzTitle: "确认清空列表？",
+        nzOnOk: () => {
+            this.store$.dispatch(SetSongList({ songList: [] }));
+            this.store$.dispatch(SetPlayList({ playList: [] }));
+            this.store$.dispatch(SetCurrentIndex({ currentIndex: -1 }));
+        }
+    })
+}
 }

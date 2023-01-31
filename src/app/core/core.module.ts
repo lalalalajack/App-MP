@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-09 19:07:58
  * @LastEditors: cwj
- * @LastEditTime: 2022-12-22 10:43:37
+ * @LastEditTime: 2023-01-31 22:36:50
  * @Introduce: 
  */
 import { NgModule, Optional, SkipSelf } from '@angular/core';
@@ -43,7 +43,7 @@ registerLocaleData(zh);
   ]
 })
 export class CoreModule {
-  //skipself 跳过自身检测  Optional 可选
+  //skipSelf 跳过自身检测  Optional 可选
   constructor(@SkipSelf() @Optional() parentModule:CoreModule){
     if(parentModule){
       throw new Error('CoreModule 只能被appModule引入');

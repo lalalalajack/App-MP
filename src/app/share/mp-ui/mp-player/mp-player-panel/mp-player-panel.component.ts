@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-31 02:59:41
  * @LastEditors: cwj
- * @LastEditTime: 2023-01-21 12:08:41
+ * @LastEditTime: 2023-01-31 23:17:27
  * @Introduce: 
  */
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChildren, asNativeElements } from '@angular/core';
@@ -27,6 +27,8 @@ export class MpPlayerPanelComponent implements OnInit, OnChanges {
   //Output实现子组件将信息通过事件的形式通知到父级组件
   @Output() onClose: EventEmitter<void> = new EventEmitter<void>();
   @Output() onChangeSong: EventEmitter<Song> = new EventEmitter<Song>();
+  @Output() onDeleteSong: EventEmitter<Song> = new EventEmitter<Song>();
+  @Output() onClearSong = new EventEmitter<void>();   //清空歌曲列表
   //后续两个面板都需要
   @ViewChildren(MpScrollComponent) private mpScroll: QueryList<MpScrollComponent> //滚动条
 
@@ -57,13 +59,13 @@ export class MpPlayerPanelComponent implements OnInit, OnChanges {
 
     if (changes['songList']) {
       //console.log('songList:', this.songList);
-      this.currentIndex = 0;
+      this.currentIndex = this.updateCurrentIndex();
     }
     //监听当前歌曲变化
     if (changes['currentSong']) {
       // console.log('currentSong:', this.currentSong);
       if (this.currentSong) {
-        this.currentIndex = findIndex(this.songList, this.currentSong);
+        this.currentIndex = this.updateCurrentIndex();
         //this.currentIndex =  this.songList.findIndex(item => item.id===this.currentSong.id);
         this.updateLyric();
         if (this.show) {
@@ -73,6 +75,7 @@ export class MpPlayerPanelComponent implements OnInit, OnChanges {
         this.resetLyric();
       }
     }
+
     if (changes['currentIndex']) {
       console.log('currentIndex:', this.currentIndex);
     }
@@ -99,6 +102,13 @@ export class MpPlayerPanelComponent implements OnInit, OnChanges {
       //console.log('currentIndex:', this.currentIndex);
     }
   }
+
+  //优化封装的方法
+  private updateCurrentIndex() {
+    return this.currentIndex = findIndex(this.songList, this.currentSong);
+  }
+
+
   //更新歌词
   private updateLyric() {
     this.resetLyric();
