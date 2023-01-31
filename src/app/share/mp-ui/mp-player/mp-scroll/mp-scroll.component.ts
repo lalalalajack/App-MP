@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-31 05:35:25
  * @LastEditors: cwj
- * @LastEditTime: 2023-01-04 01:25:27
+ * @LastEditTime: 2023-01-21 07:09:23
  * @Introduce: 
  */
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
@@ -44,6 +44,11 @@ export class MpScrollComponent implements OnInit, AfterViewInit, OnChanges {
   scrollToElement(...args) {
     //此处apply的使用可以看笔记js/函数/方法
     this.bs.scrollToElement.apply(this.bs, args)
+  }
+
+  scrollTo(...args) {
+    //此处apply的使用可以看笔记js/函数/方法
+    this.bs.scrollTo.apply(this.bs, args)
   }
 
   ngOnChanges(changes: SimpleChanges): void {

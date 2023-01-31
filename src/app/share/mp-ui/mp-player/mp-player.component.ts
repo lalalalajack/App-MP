@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-11 22:42:31
  * @LastEditors: cwj
- * @LastEditTime: 2023-01-18 23:38:01
+ * @LastEditTime: 2023-01-21 11:58:24
  * @Introduce: 
  */
 import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
@@ -15,6 +15,8 @@ import { SetCurrentIndex, SetPlayList, SetPlayMode } from 'src/app/store/actions
 import { Subscription, from, fromEvent } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
 import { findIndex, shuffle } from 'src/app/utils/array';
+import { MpPlayerPanelComponent } from './mp-player-panel/mp-player-panel.component';
+import { flush } from '@angular/core/testing';
 
 const modeTypes: PlayMode[] = [{
   type: 'loop',
@@ -73,6 +75,7 @@ export class MpPlayerComponent implements OnInit {
   showListPanel: boolean = false;
 
   @ViewChild('audio', { static: true }) private audio: ElementRef;
+  @ViewChild(MpPlayerPanelComponent, { static: false }) private playerPanel;
   private audioEl: HTMLAudioElement;
 
 
@@ -224,13 +227,13 @@ export class MpPlayerComponent implements OnInit {
   //获得滑动条滑动百分比
   onPercentChange(per: number) {
     if (this.currentSong) {
-      console.log("per:", per)
+      //console.log("per:", per)
       //滑动条控制播放进度
       const currentTime = this.duration * (per / 100);
       this.audioEl.currentTime = currentTime;
-      // if (this.playerPanel) {
-      //   this.playerPanel.seekLyric(currentTime * 1000);
-      // }
+      if (this.playerPanel) {
+        this.playerPanel.seekLyric(currentTime * 1000);
+      }
     }
   }
 
@@ -296,6 +299,9 @@ export class MpPlayerComponent implements OnInit {
   private loop() {
     this.audioEl.currentTime = 0;
     this.play();
+    if (this.playerPanel) {
+      this.playerPanel.seekLyric(0);
+    }
   }
 
 

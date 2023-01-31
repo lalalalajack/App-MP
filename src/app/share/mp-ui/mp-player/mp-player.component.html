@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-11 22:42:31
  * @LastEditors: cwj
- * @LastEditTime: 2023-01-04 00:12:57
+ * @LastEditTime: 2023-01-21 07:31:21
  * @Introduce: 
 -->
 <div class="m-player" (click)="selfClick=true">
@@ -72,6 +72,7 @@
             [songList]="songList" 
             [currentSong]="currentSong" 
             [show]="showListPanel" 
+            [playing]="playing"
             (onClose)="showListPanel=false"
             (onChangeSong)="onChangeSong($event)"
             ></app-mp-player-panel>
