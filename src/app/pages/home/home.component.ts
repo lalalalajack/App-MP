@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-09 21:25:06
  * @LastEditors: cwj
- * @LastEditTime: 2023-01-04 01:11:58
+ * @LastEditTime: 2023-02-01 00:21:34
  * @Introduce: 
  */
 import { Component, OnInit, ViewChild } from '@angular/core';
@@ -15,10 +15,7 @@ import { ActivatedRoute } from '@angular/router';
 import { SheetService } from 'src/app/services/sheet.service';
 import { Store, select } from '@ngrx/store';
 import { AppStoreModule } from 'src/app/store';
-import { SetCurrentIndex, SetPlayList, SetSongList } from 'src/app/store/actions/player.action';
-import { PlayState } from 'src/app/store/reducers/player.reducer';
-import { getPlayer } from 'src/app/store/selectors/player.selector';
-import { findIndex, shuffle } from 'src/app/utils/array';
+import { BatchActionsService } from 'src/app/store/batch-actions.service';
 
 @Component({
   selector: 'app-home',
@@ -33,7 +30,7 @@ export class HomeComponent implements OnInit {
   songSheetsList: SongSheet[];
   singer: Singer[];
 
-  private playState:PlayState;
+  //private playState:PlayState;
 
   @ViewChild(NzCarouselComponent, { static: true }) private nzCarousel: NzCarouselComponent;
 
@@ -42,7 +39,7 @@ export class HomeComponent implements OnInit {
     // private singerServe: SingerService,
     private route: ActivatedRoute,
     private SheetService: SheetService,
-    private store$: Store<AppStoreModule>
+    private batchAction:BatchActionsService
   ) {
     //route.data 是一个observable对象 包含了route的一些配置，详情见home-routing.module.ts文件
     //由于routedata包含了data和resolve，而我们只需要resolve的数据，用map
@@ -54,7 +51,7 @@ export class HomeComponent implements OnInit {
       this.singer = singer;
     });
 
-    this.store$.pipe(select(getPlayer)).subscribe(res=>this.playState=<PlayState>res);
+
     // this.getBanners();
     // this.getHotTags();
     // this.getPersonalSheetList(); 
@@ -104,17 +101,8 @@ export class HomeComponent implements OnInit {
     console.log("id:", id);
     this.SheetService.playSheet(id).subscribe(list => {
       //console.log("res",res);
-      this.store$.dispatch(SetSongList({ songList: list }));
-      //首页初始化时先订阅当前播放信息，在点击播放歌单时判断当前播放模式是否为随机，是则打乱歌单数组，重新计算当前歌曲的索引。
-      let trueIndex = 0, trueList = list.slice();
-      if (this.playState.playMode.type === "random") {
-          trueList = shuffle(list || []);
-          trueIndex = findIndex(trueList, list[trueIndex]);
-      }
-
-      this.store$.dispatch(SetPlayList({ playList: trueList }));
-      this.store$.dispatch(SetCurrentIndex({ currentIndex: trueIndex }));
-    }) 
+      this.batchAction.selectPlayList({list,index:0});
+    })
   }
 
 }

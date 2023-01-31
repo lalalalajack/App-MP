@@ -1,4 +1,4 @@
-import { PlayCountPipe } from './play-count.pipe';
+import { PlayCountPipe } from './pipes/play-count.pipe';
 
 describe('PlayCountPipe', () => {
   it('create an instance', () => {

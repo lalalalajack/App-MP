@@ -41,6 +41,6 @@ import { MpUiModule } from './mp-ui/mp-ui.module';
     NzMenuModule,
     NzCarouselModule,
     MpUiModule
-  ]
+  ],
 })
 export class ShareModule { }

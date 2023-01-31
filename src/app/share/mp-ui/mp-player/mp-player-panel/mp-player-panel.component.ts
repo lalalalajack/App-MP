@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-31 02:59:41
  * @LastEditors: cwj
- * @LastEditTime: 2023-01-31 23:17:27
+ * @LastEditTime: 2023-02-01 02:47:48
  * @Introduce: 
  */
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChildren, asNativeElements } from '@angular/core';
@@ -95,7 +95,10 @@ export class MpPlayerPanelComponent implements OnInit, OnChanges {
         //将原生的setTimeout()替换为rxjs的timer
         timer(80).subscribe(() => {
           if (this.currentSong) {
-            this.scrollCurrent();
+            this.scrollCurrent(0);
+          }
+          if (this.lyricRefs) {
+            this.scrollCurrentLyric(0);
           }
         })
       }
@@ -153,10 +156,7 @@ export class MpPlayerPanelComponent implements OnInit, OnChanges {
       if (this.lyricRefs.length) {
         this.currentLineNum = lineNum;
         if (lineNum > this.startLine) {
-          const targetLine = this.lyricRefs[lineNum - this.startLine];
-          if (targetLine) {
-            this.mpScroll.last.scrollToElement(targetLine, 300, false, false);
-          }
+          this.scrollCurrentLyric();
         } else {
           this.mpScroll.last.scrollTo(0, 0);
         }
@@ -181,7 +181,14 @@ export class MpPlayerPanelComponent implements OnInit, OnChanges {
       if ((offsetTop - Math.abs(this.scrollY)) > offsetHeight * 5 || offsetTop < Math.abs(this.scrollY)) {
         this.mpScroll.first.scrollToElement(currentLi, speed, true, true)
       }
+    }
+  }
 
+  //移动歌词滚动条
+  private scrollCurrentLyric(speed = 300) {
+    const targetLine = this.lyricRefs[this.currentLineNum - this.startLine];
+    if (targetLine) {
+      this.mpScroll.last.scrollToElement(targetLine, speed, false, false);
     }
   }
 

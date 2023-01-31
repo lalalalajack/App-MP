@@ -2,17 +2,19 @@
  * @Author: cwj
  * @Date: 2022-12-11 22:42:31
  * @LastEditors: cwj
- * @LastEditTime: 2023-01-31 22:23:29
+ * @LastEditTime: 2023-02-01 01:11:12
  * @Introduce: 
 -->
-<div class="m-player" (click)="selfClick=true">
+<div class="m-player" 
+appClickoutside
+[bindFlag]="bindFlag"
+(onClickOutSide)="onClickOutSide()">
     <div class="lock">
         <div class="left"><i></i></div>
     </div>
     <div class="hand"></div>
     <div class="container">
         <div class="wrap">
-
             <!-- 按钮 -->
             <div class="btns">
                 <i class="prev" (click)="onPrev(currentIndex-1)"></i>
@@ -24,7 +26,6 @@
                 <img [src]="picUrl" alt="">
                 <i class="mask"></i>
             </div>
-
             <div class="play">
                 <!-- 歌曲和歌手名字 -->
                 <div class="words clearfix ">
@@ -47,7 +48,6 @@
                     </span>
                 </div>
             </div>
-
             <!-- 右侧小图标 -->
             <div class="oper">
                 <i class="like" title="收藏"></i>
@@ -68,21 +68,13 @@
             </div>
             <!-- 音乐面板 -->
             <!-- 父指令通过事件绑定 (eventName) 的方式监听该事件，如下的（onClose)，并通过 $event 对象来获取 payload 对象,下面的是监听子组件的事件的发生后，为showListPanel赋值 -->
-            <app-mp-player-panel 
-            [songList]="songList" 
-            [currentSong]="currentSong" 
-            [show]="showListPanel" 
-            [playing]="playing" 
-            (onClose)="showListPanel=false"
-            (onChangeSong)="onChangeSong($event)"
-            (onDeleteSong)="onDeleteSong($event)"
-            (onClearSong)="onClearSong()"
-            ></app-mp-player-panel>
+            <app-mp-player-panel [songList]="songList" [currentSong]="currentSong" [show]="showListPanel"
+                [playing]="playing" (onClose)="showListPanel=false" (onChangeSong)="onChangeSong($event)"
+                (onDeleteSong)="onDeleteSong($event)" (onClearSong)="onClearSong()"></app-mp-player-panel>
         </div>
     </div>
     <!-- 开始时没有音乐在放，可选参数 -->
     <audio #audio [src]="currentSong?.url" (canplay)="onCanplay()" (timeupdate)="OnTimeUpdate($event)"
         (ended)="onEnded()">
-
     </audio>
 </div>

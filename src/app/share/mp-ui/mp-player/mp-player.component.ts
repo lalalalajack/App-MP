@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-11 22:42:31
  * @LastEditors: cwj
- * @LastEditTime: 2023-01-31 23:32:55
+ * @LastEditTime: 2023-02-01 02:14:42
  * @Introduce: 
  */
 import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
@@ -18,6 +18,7 @@ import { findIndex, shuffle } from 'src/app/utils/array';
 import { MpPlayerPanelComponent } from './mp-player-panel/mp-player-panel.component';
 import { flush } from '@angular/core/testing';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { BatchActionsService } from 'src/app/store/batch-actions.service';
 
 
 const modeTypes: PlayMode[] = [{
@@ -63,8 +64,8 @@ export class MpPlayerComponent implements OnInit {
   //是否显示音量面板
   showVolumePanel: boolean = false;
 
-  //当前点击的部分是否是音量面板本身
-  selfClick = false;
+  //是否绑定document click事件
+  bindFlag = false;
 
   //绑定window的click事件
   private winClick: Subscription;
@@ -84,7 +85,8 @@ export class MpPlayerComponent implements OnInit {
   constructor(
     private store$: Store<AppStoreModule>,
     @Inject(DOCUMENT) private doc: Document,
-    private nzModalServe: NzModalService
+    private nzModalServe: NzModalService,
+    private batchAction: BatchActionsService
   ) {
     const appStore$ = this.store$.pipe(select(getPlayer));
     //select操作符非原生，是ngrx携带的
@@ -135,11 +137,12 @@ export class MpPlayerComponent implements OnInit {
       let list = this.songList.slice();
       if (mode.type === 'random') {
         list = shuffle(this.songList);
-        //改变播放模式的时候，当前放的歌曲照样放
-        this.updateCurrentIndex(list, this.currentSong);
-        //console.log("list:", list);
-        this.store$.dispatch(SetPlayList({ playList: list }));
+
       }
+      //改变播放模式的时候，当前放的歌曲照样放
+      this.updateCurrentIndex(list, this.currentSong);
+      //console.log("list:", list);
+      this.store$.dispatch(SetPlayList({ playList: list }));
 
     }
   }
@@ -166,6 +169,13 @@ export class MpPlayerComponent implements OnInit {
     this.store$.dispatch(SetCurrentIndex({ currentIndex: newIndex }));
   }
 
+  // 点击面板外部
+  onClickOutSide() {
+    this.showVolumePanel = false;
+    this.showListPanel = false;
+    this.bindFlag = false;
+  }
+
   //改变模式
   changeMode() {
     // const temp = modeTypes[++this.modeCount % 3];
@@ -188,14 +198,15 @@ export class MpPlayerComponent implements OnInit {
   togglePanel(type: string) {
     //动态变量的方式来访问this对象属性
     this[type] = !this[type];
-    if (this.showVolumePanel || this.showListPanel) { //如果音量或者列表面板存在，绑定一个全局click事件（点击外侧消失面板）
-      this.bindDocumentClickListener(type);
+    /* if (this.showVolumePanel || this.showListPanel) { //如果音量或者列表面板存在，绑定一个全局click事件（点击外侧消失面板）
+      this.bindFlag = true;
     } else {
-      this.unbindDocumentClickListener(type);
-    }
+      this.bindFlag = false;
+    } */
+    this.bindFlag = (this.showVolumePanel || this.showListPanel);
   }
 
-  bindDocumentClickListener(type: string) {
+  /* bindDocumentClickListener(type: string) {
     if (!this.winClick) {
       this.winClick = fromEvent(this.doc, 'click').subscribe(() => {
         if (!this.selfClick) { //即点击了播放器除了控制面板以外的部分
@@ -207,13 +218,13 @@ export class MpPlayerComponent implements OnInit {
         this.selfClick = false;
       });
     }
-  }
-  unbindDocumentClickListener(type: string) {
+  } */
+  /* unbindDocumentClickListener(type: string) {
     if (this.winClick) {
       this.winClick.unsubscribe();
       this.winClick = null;
     }
-  }
+  } */
 
   //列表更改歌曲
   onChangeSong(song: Song) {
@@ -342,34 +353,18 @@ export class MpPlayerComponent implements OnInit {
 
   //删除歌曲
   onDeleteSong(song: Song) {
-    const songList = this.songList.slice();
-    const playList = this.playList.slice();
-    let currentIndex = this.currentIndex;
-    //找到歌曲在songList和playList里面的索引
-    const sIndex = findIndex(songList, song);
-    songList.splice(sIndex, 1);
-    const pIndex = findIndex(playList, song);
-    playList.splice(pIndex, 1);
-    //当前播放的歌曲大于要删除的歌曲的下标，以及当前播放的歌曲就是最后一首歌
-    if (currentIndex > pIndex || currentIndex === playList.length) {
-      currentIndex--;
-    }
-
-    this.store$.dispatch(SetSongList({ songList }));
-    this.store$.dispatch(SetPlayList({ playList }));
-    this.store$.dispatch(SetCurrentIndex({ currentIndex }));
+    this.batchAction.deleteSong(song);
   }
 
-  //清空歌曲(为了防止误操作，使用ngzorro的组件)
-   // 清空歌曲
-   onClearSong () {
+  //清空歌曲(为了防止误操作，使用ngZorro的组件)
+  onClearSong() {
     this.nzModalServe.confirm({
-        nzTitle: "确认清空列表？",
-        nzOnOk: () => {
-            this.store$.dispatch(SetSongList({ songList: [] }));
-            this.store$.dispatch(SetPlayList({ playList: [] }));
-            this.store$.dispatch(SetCurrentIndex({ currentIndex: -1 }));
-        }
+      nzTitle: "确认清空列表？",
+      nzOnOk: () => {
+        this.batchAction.clearSong();
+      }
     })
-}
+  }
+
+
 }
