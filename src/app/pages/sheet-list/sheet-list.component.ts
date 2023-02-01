@@ -3,11 +3,11 @@ import { SheetParams } from 'src/app/services/sheet.service';
  * @Author: cwj
  * @Date: 2023-02-01 15:33:29
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-01 18:43:16
+ * @LastEditTime: 2023-02-01 19:46:25
  * @Introduce: 
  */
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SheetList } from 'src/app/services/data-types/common.types';
 import { SheetParams, SheetService } from 'src/app/services/sheet.service';
 import { BatchActionsService } from 'src/app/store/batch-actions.service';
@@ -31,6 +31,7 @@ export class SheetListComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router:Router,
     private SheetServe: SheetService,
     private batchActionsServe: BatchActionsService
   ) {
@@ -66,5 +67,10 @@ export class SheetListComponent implements OnInit {
     this.listParams.offset = offset;
     this.getList();
   }
+
+    //点击歌单dom跳转链接到歌单详情
+    toInfo(id: number) {
+      this.router.navigate(['/sheetInfo', id]);
+    }
 
 }

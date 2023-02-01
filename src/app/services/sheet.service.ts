@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-12 16:54:47
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-01 18:13:08
+ * @LastEditTime: 2023-02-01 20:45:01
  * @Introduce: 
  */
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -36,10 +36,6 @@ export class SheetService {
     const params = new HttpParams({ fromString: qs.stringify(args) });
     return this.http.get(this.uri + 'top/playList', { params }).pipe(map(res => res as SheetList))
   }
-
-
-
-
 
   //通过id获取歌曲
   //先拿到歌单详情，然后pluck出需要的tracks属性，最后switchMap出每首歌的url地址

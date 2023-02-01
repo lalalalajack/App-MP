@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-12 18:15:29
  * @LastEditors: cwj
- * @LastEditTime: 2023-01-19 00:45:30
+ * @LastEditTime: 2023-02-02 01:24:14
  * @Introduce: 
  */
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -71,19 +71,16 @@ export class SongService {
       .pipe(map(res => {
         try {
           return {
-          lyric: res['lrc'].lyric,
-          tlyric: res['tlyric'].lyric,
-        }
+            lyric: res['lrc'].lyric,
+            tlyric: res['tlyric'].lyric,
+          }
         } catch (error) {
           return {
             lyric: '',
             tlyric: '',
           }
         }
-        
+
       }))
   }
-
-
-
 }

@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-09 21:25:06
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-01 00:21:34
+ * @LastEditTime: 2023-02-01 21:02:16
  * @Introduce: 
  */
 import { Component, OnInit, ViewChild } from '@angular/core';
@@ -11,7 +11,7 @@ import { NzCarouselComponent } from 'ng-zorro-antd/carousel';
 // import { HomeService } from 'src/app/services/home.service';
 // import { SingerService } from 'src/app/services/singer.service';
 import { map } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SheetService } from 'src/app/services/sheet.service';
 import { Store, select } from '@ngrx/store';
 import { AppStoreModule } from 'src/app/store';
@@ -38,8 +38,9 @@ export class HomeComponent implements OnInit {
     // private homeServe: HomeService,
     // private singerServe: SingerService,
     private route: ActivatedRoute,
+    private router: Router,
     private SheetService: SheetService,
-    private batchAction:BatchActionsService
+    private batchAction: BatchActionsService
   ) {
     //route.data 是一个observable对象 包含了route的一些配置，详情见home-routing.module.ts文件
     //由于routedata包含了data和resolve，而我们只需要resolve的数据，用map
@@ -101,8 +102,13 @@ export class HomeComponent implements OnInit {
     console.log("id:", id);
     this.SheetService.playSheet(id).subscribe(list => {
       //console.log("res",res);
-      this.batchAction.selectPlayList({list,index:0});
+      this.batchAction.selectPlayList({ list, index: 0 });
     })
+  }
+
+  //点击歌单dom跳转链接到歌单详情
+  toInfo(id: number) {
+    this.router.navigate(['/sheetInfo', id]);
   }
 
 }

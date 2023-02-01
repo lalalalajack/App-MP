@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-09 21:56:12
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-01 18:20:32
+ * @LastEditTime: 2023-02-01 23:34:40
  * @Introduce: 
  */
 //轮播图
@@ -21,10 +21,19 @@ export type HotTag = {
 //歌单
 export type SongSheet = {
     id: number;
+    userId: number;
     name: string;
     picUrl: string;
     coverImgUrl: string;
     playCount: number;//播放量
+    tags: string[]; //标签
+    createTime: number; //创建时间戳
+    creator: { nickname: string; avatarUrl: string; }; //创建者{昵称；头像}
+    description: string; //描述
+    subscribedCount: number; //订阅量
+    shareCount: number; //分享量
+    commentCount: number; //评论数
+    subscribed: boolean; //当前账户是否已经订阅（暂设）
     tracks: Song[];
 }
 
