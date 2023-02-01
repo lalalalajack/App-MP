@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-09 21:56:12
  * @LastEditors: cwj
- * @LastEditTime: 2023-01-19 00:13:07
+ * @LastEditTime: 2023-02-01 18:20:32
  * @Introduce: 
  */
 //轮播图
@@ -23,6 +23,7 @@ export type SongSheet = {
     id: number;
     name: string;
     picUrl: string;
+    coverImgUrl: string;
     playCount: number;//播放量
     tracks: Song[];
 }
@@ -56,4 +57,11 @@ export type Lyric = {
     lyric: string;    //原文
     tlyric: string;     //译文
 }
+
+// 歌单列表
+export type SheetList = {
+    playlists: SongSheet[],
+    total: number,
+}
+
 

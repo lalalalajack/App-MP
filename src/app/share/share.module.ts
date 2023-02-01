@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-09 19:15:22
  * @LastEditors: cwj
- * @LastEditTime: 2023-01-31 22:30:50
+ * @LastEditTime: 2023-02-01 18:31:57
  * @Introduce: 
  */
 import { NgModule } from '@angular/core';
@@ -16,6 +16,8 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzCarouselModule } from 'ng-zorro-antd/carousel';
 import { MpUiModule } from './mp-ui/mp-ui.module';
+import { NzRadioModule } from 'ng-zorro-antd/radio';
+import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 
 @NgModule({
   imports: [
@@ -28,7 +30,9 @@ import { MpUiModule } from './mp-ui/mp-ui.module';
     NzIconModule,
     NzMenuModule,
     NzCarouselModule,
-    MpUiModule
+    MpUiModule,
+    NzRadioModule,
+    NzPaginationModule
   ],
   exports:[
     CommonModule,
@@ -40,7 +44,9 @@ import { MpUiModule } from './mp-ui/mp-ui.module';
     NzIconModule,
     NzMenuModule,
     NzCarouselModule,
-    MpUiModule
+    MpUiModule,
+    NzRadioModule,
+    NzPaginationModule
   ],
 })
 export class ShareModule { }

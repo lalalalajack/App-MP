@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2023-01-18 23:55:16
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-01 03:00:51
+ * @LastEditTime: 2023-02-01 19:01:01
  * @Introduce: 歌词解析类
  */
 import Base from "@better-scroll/core/dist/types/animater/Base";
@@ -10,7 +10,7 @@ import { Observable, Subject, Subscription, from, skip, timer, zip } from "rxjs"
 import { Lyric } from "src/app/services/data-types/common.types";
 
 //时间正则  
-const timeExp = /\[(\d{2}):(\d{2})(\.\d{2,3})?\]/
+const timeExp = /\[(\d{2}):(\d{2})(?:\.\d{2,3})?\]/
 
 export interface BaseLyricLine {
     txt: string;

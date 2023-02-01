@@ -2,16 +2,24 @@
  * @Author: cwj
  * @Date: 2022-12-12 16:54:47
  * @LastEditors: cwj
- * @LastEditTime: 2022-12-12 20:29:23
+ * @LastEditTime: 2023-02-01 18:13:08
  * @Introduce: 
  */
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { from, map, Observable, pluck, switchMap } from 'rxjs';
-import { Song, SongSheet } from './data-types/common.types';
+import { SheetList, Song, SongSheet } from './data-types/common.types';
 import { API_CONFIG, ServicesModule } from './services.module';
 import { SongService } from './song.service';
+import * as qs from 'qs';
 
+//歌单参数类型
+export type SheetParams = {
+  offset: number, // 偏移数量 , 用于分页 , 如 :( 评论页数 -1)*50, 其中 50 为 limit 的值
+  limit: number, // 取出歌单数量 
+  order: 'new' | 'hot', // 最新和最热
+  cat: string, // 歌单标签
+}
 @Injectable({
   providedIn: ServicesModule
 })
@@ -22,12 +30,15 @@ export class SheetService {
     private songServe: SongService
   ) { }
 
-  //通过id获取歌单详情
-  getSongSheetDetail(id: number): Observable<SongSheet> {
-    const params = new HttpParams().set('id', id.toString());
-    return this.http.get(this.uri + 'playlist/detail', { params })
-      .pipe(map((res: { playlist: SongSheet }) => res.playlist));
+
+  // 获取歌单列表
+  getSheets(args: SheetParams): Observable<SheetList> {
+    const params = new HttpParams({ fromString: qs.stringify(args) });
+    return this.http.get(this.uri + 'top/playList', { params }).pipe(map(res => res as SheetList))
   }
+
+
+
 
 
   //通过id获取歌曲
@@ -48,5 +59,10 @@ export class SheetService {
         switchMap(tracks => this.songServe.getSongList(tracks))
       );
   }
-
+  //通过id获取歌单详情
+  getSongSheetDetail(id: number): Observable<SongSheet> {
+    const params = new HttpParams().set('id', id.toString());
+    return this.http.get(this.uri + 'playlist/detail', { params })
+      .pipe(map((res: { playlist: SongSheet }) => res.playlist));
+  }
 }

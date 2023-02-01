@@ -69,10 +69,18 @@ export class SongService {
     //过滤得出需要的两个对象
     return this.http.get(this.uri + 'lyric', { params })
       .pipe(map(res => {
-        return {
+        try {
+          return {
           lyric: res['lrc'].lyric,
           tlyric: res['tlyric'].lyric,
         }
+        } catch (error) {
+          return {
+            lyric: '',
+            tlyric: '',
+          }
+        }
+        
       }))
   }
 

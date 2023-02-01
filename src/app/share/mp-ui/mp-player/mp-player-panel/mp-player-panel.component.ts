@@ -120,6 +120,7 @@ export class MpPlayerPanelComponent implements OnInit, OnChanges {
       this.lyric = new MpLyric(res);
       this.currentLyric = this.lyric.lines;
       //console.log('currentLyric:', this.currentLyric);
+      this.startLine = res.tlyric ? 1 : 3;
       this.handleLyric();
       //歌词重置到顶部
       this.mpScroll.last.scrollTo(0, 0);
