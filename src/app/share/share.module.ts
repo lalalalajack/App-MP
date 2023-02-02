@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-09 19:15:22
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-01 23:43:38
+ * @LastEditTime: 2023-02-02 22:49:36
  * @Introduce: 
  */
 import { NgModule } from '@angular/core';
@@ -20,6 +20,7 @@ import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzMessageModule } from 'ng-zorro-antd/message';
 
 @NgModule({
   imports: [

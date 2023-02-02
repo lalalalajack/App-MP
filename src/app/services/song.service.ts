@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-12 18:15:29
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-02 01:24:14
+ * @LastEditTime: 2023-02-02 19:24:53
  * @Introduce: 
  */
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -22,7 +22,9 @@ export class SongService {
   getSongUrl(ids: string): Observable<SongUrl[]> {
     const params = new HttpParams().set('id', ids);
     return from(this.http.get(this.uri + 'song/url', { params }))
-      .pipe(map((res: { data: SongUrl[] }) => res.data));
+      .pipe(
+        map((res: { data: SongUrl[] }) => res.data)
+      );
   }
 
   getSongList(songs: Song | Song[]): Observable<Song[]> {

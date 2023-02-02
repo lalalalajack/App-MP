@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-31 02:59:41
  * @LastEditors: cwj
- * @LastEditTime: 2023-01-31 23:16:29
+ * @LastEditTime: 2023-02-02 22:57:31
  * @Introduce: 
 -->
 <div class="play-panel" [class.show]="show">
@@ -14,8 +14,8 @@
                 <i class="icon" title="收藏全部"></i>收藏全部
             </div>
             <span class="line"></span>
-            <div class="clear-all">
-                <i class="icon trush" title="清除全部" (click)="onClearSong.emit()"></i>清除全部
+            <div class="clear-all" (click)="onClearSong.emit()">
+                <i class="icon trush" title="清除全部" ></i>清除全部
             </div>
             <p class="playing-name">{{currentSong?.name}}</p>
             <!-- 子指令调用已创建的 EventEmitter 实例中的 emit(payload) 方法来触发一个事件 -->

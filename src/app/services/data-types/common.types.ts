@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-09 21:56:12
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-01 23:34:40
+ * @LastEditTime: 2023-02-02 23:11:35
  * @Introduce: 
  */
 //轮播图
@@ -34,7 +34,7 @@ export type SongSheet = {
     shareCount: number; //分享量
     commentCount: number; //评论数
     subscribed: boolean; //当前账户是否已经订阅（暂设）
-    tracks: Song[];
+    tracks: Song[]; 
 }
 
 //歌手

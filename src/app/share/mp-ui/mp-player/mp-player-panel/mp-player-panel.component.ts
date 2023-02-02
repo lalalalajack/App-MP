@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-31 02:59:41
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-01 02:47:48
+ * @LastEditTime: 2023-02-02 20:04:30
  * @Introduce: 
  */
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChildren, asNativeElements } from '@angular/core';
@@ -59,7 +59,9 @@ export class MpPlayerPanelComponent implements OnInit, OnChanges {
 
     if (changes['songList']) {
       //console.log('songList:', this.songList);
-      this.currentIndex = this.updateCurrentIndex();
+      if (this.currentSong) {
+        this.currentIndex = this.updateCurrentIndex();
+      }
     }
     //监听当前歌曲变化
     if (changes['currentSong']) {

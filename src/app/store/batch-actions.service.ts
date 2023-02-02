@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2023-02-01 00:06:20
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-01 00:51:25
+ * @LastEditTime: 2023-02-02 22:26:23
  * @Introduce: 优化处理，封装批量提交
  */
 import { Injectable } from '@angular/core';
@@ -36,6 +36,52 @@ export class BatchActionsService {
     this.store$.dispatch(SetCurrentIndex({ currentIndex: trueIndex }));
   }
 
+  //添加歌曲
+  insertSong(song: Song, isPlay: boolean) {
+    const songList = this.playState.songList.slice();
+    const playList = this.playState.playList.slice();
+    let insertIndex = this.playState.currentIndex; //插入歌曲的下标位置默认等于当前播放的下标位置
+    const pIndex = findIndex(playList, song);
+    if (pIndex > -1) {
+      //歌曲已经存在在列表里
+      if (isPlay) {
+        //点击了播放按钮
+        insertIndex = pIndex;
+      }
+    } else {
+      //列表里面没有该歌曲
+      songList.push(song);
+      playList.push(song);
+      if (isPlay) {
+        //点击了播放按钮
+        insertIndex = songList.length - 1; //最后播放
+      }
+      this.store$.dispatch(SetSongList({ songList }));
+      this.store$.dispatch(SetPlayList({ playList }));
+    }
+
+    //点击播放按钮
+    if (insertIndex !== this.playState.currentIndex) {
+      this.store$.dispatch(SetCurrentIndex({ currentIndex: insertIndex }));
+    }
+  }
+
+  //添加多首歌曲
+  insertSongs(songs: Song[], isPlay) {
+    const songList = this.playState.songList.slice();
+    const playList = this.playState.playList.slice();
+    songs.forEach(song => {
+      const pIndex = findIndex(playList, song);
+      if (pIndex === -1) {
+        //歌曲尚未在列表里
+        songList.push(song);
+        playList.push(song);
+      }
+    });
+    this.store$.dispatch(SetSongList({ songList }));
+    this.store$.dispatch(SetPlayList({ playList }));
+  }
+
   //删除歌曲
   deleteSong(song: Song) {
     const songList = this.playState.songList.slice();
@@ -62,4 +108,5 @@ export class BatchActionsService {
     this.store$.dispatch(SetPlayList({ playList: [] }));
     this.store$.dispatch(SetCurrentIndex({ currentIndex: -1 }));
   }
+
 }
