@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2023-02-01 19:37:04
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-02 23:15:22
+ * @LastEditTime: 2023-02-02 23:36:05
  * @Introduce: 
 -->
 <div class="sheet-info wrap feature-wrap">
@@ -106,7 +106,7 @@
                                 (click)="onAddSong(item,true)"></i>
                         </td>
                         <td class="song-name">
-                            <a> {{item.name}}</a>
+                            <a [routerLink]="['/songInfo',item.id]"> {{item.name}}</a>
                         </td>
                         <td class="time-col">
                             <span>{{item.dt / 1000 | formatTime}}</span>

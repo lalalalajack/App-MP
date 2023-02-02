@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-12 18:15:29
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-02 19:24:53
+ * @LastEditTime: 2023-02-03 01:54:40
  * @Introduce: 
  */
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -82,7 +82,15 @@ export class SongService {
             tlyric: '',
           }
         }
-
       }))
+  }
+
+  //通过id获取歌曲详情(单个id,单首歌曲，虽然这个API可以多个id,多首歌曲)
+  getSongDetail(ids: string): Observable<Song> {
+    const params = new HttpParams().set('ids', ids);
+    return from(this.http.get(this.uri + 'song/detail', { params }))
+      .pipe(
+        map((res: { songs: Song }) => res.songs[0])
+      );
   }
 }

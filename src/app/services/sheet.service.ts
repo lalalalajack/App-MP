@@ -59,6 +59,8 @@ export class SheetService {
   getSongSheetDetail(id: number): Observable<SongSheet> {
     const params = new HttpParams().set('id', id.toString());
     return this.http.get(this.uri + 'playlist/detail', { params })
-      .pipe(map((res: { playlist: SongSheet }) => res.playlist));
+      .pipe(
+        map((res: { playlist: SongSheet }) => res.playlist)
+      );
   }
 }
