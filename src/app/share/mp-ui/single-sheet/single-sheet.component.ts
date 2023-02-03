@@ -26,7 +26,9 @@ export class SingleSheetComponent implements OnInit {
   }
 
   //播放歌单
-  playSheet(id: number) {
+  playSheet(evt:MouseEvent,id: number) {
+    //阻止冒泡
+    evt.stopPropagation();
     //点击发射number,在模板中接收
     this.onPlay.emit(id);
   }

@@ -1,0 +1,90 @@
+<!--
+ * @Author: cwj
+ * @Date: 2023-02-03 02:45:51
+ * @LastEditors: cwj
+ * @LastEditTime: 2023-02-03 15:38:58
+ * @Introduce: 
+-->
+<div class="singer-detail wrap feature-wrap clearfix">
+    <!-- 左半部分 -->
+    <div class="dt-left">
+        <div class="left-wrap">
+            <div class="n-artist">
+                <div class="names clearfix">
+                    <h2 class="ellipsis">{{singerDetail.artist.name}}</h2>
+                    <h3 class="ellipsis">{{singerDetail.artist.alias.join(';')}}</h3>
+                </div>
+                <div class="cover-img">
+                    <img class="full-height" [src]="singerDetail.artist.picUrl" [alt]="singerDetail.artist.name" />
+                </div>
+                <button class="btn btn-like" [class.btn-liked]="hasLiked"
+                    (click)="onLikeSinger(singerDetail.artist.id.toString())"></button>
+            </div>
+
+            <div class="top-50">
+                <div class="btns clearfix">
+                    <nz-button-group class="btn">
+                        <button class="play" nz-button nzType="primary"
+                            (click)="onAddSongs(singerDetail.hotSongs, true)">
+                            <i nz-icon nzType="play-circle" nzTheme="outline"></i>播放
+                        </button>
+                        <button class="add" nz-button nzType="primary"
+                            (click)="onAddSongs(singerDetail.hotSongs)">+</button>
+                    </nz-button-group>
+                    <button class="btn like" nz-button (click)="onLikeSongs(singerDetail.hotSongs)">
+                        <span>收藏</span>{{singerDetail.hotSongs.length}}
+                    </button>
+                </div>
+
+                <!-- 列表 -->
+                <nz-table class="wy-table" #basicTable [nzData]="singerDetail.hotSongs" [nzFrontPagination]="false"
+                    nzBordered nzNoResult="暂无音乐！">
+                    <thead>
+                        <tr>
+                            <th nzWidth="80px"></th>
+                            <th>标题</th>
+                            <th nzWidth="120px">时长</th>
+                            <th>专辑</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of basicTable.data; index as i">
+                            <td class="first-col">
+                                <span>{{i + 1}}</span>
+                                <i class="ico play-song" title="播放" [class.current]="currentIndex === i"
+                                    (click)="onAddSong(item, true)"></i>
+                            </td>
+                            <td class="song-name">
+                                <a [routerLink]="['/songInfo', item.id]">{{item.name}}</a>
+                            </td>
+                            <td class="time-col">
+                                <span>{{item.dt / 1000 | formatTime}}</span>
+                                <p class="icons">
+                                    <i class="ico add" title="添加" (click)="onAddSong(item)"></i>
+                                    <i class="ico like" title="收藏" (click)="onLikeSong(item.id)"></i>
+                                    <i class="ico share" title="分享" (click)="onShareSong(item)"></i>
+                                </p>
+                            </td>
+                            <td>{{item.al.name}}</td>
+                        </tr>
+                    </tbody>
+                </nz-table>
+            </div>
+        </div>
+    </div>
+
+    <!-- 右半部分 -->
+    <div class="dt-right">
+        <div class="right-wrap">
+            <h3>相似歌手</h3>
+            <!-- <ul class="clearfix">
+                <li *ngFor="let item of simiSingers" [routerLink]="['/singer', item.id]">
+                    <div class="pic">
+                        <img [src]="item.picUrl" [alt]="item.name">
+                    </div>
+                    <p class="ellipsis">{{item.name}}</p>
+                </li>
+            </ul> -->
+        </div>
+    </div>
+</div>

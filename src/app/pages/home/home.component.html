@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-09 21:25:06
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-01 19:39:34
+ * @LastEditTime: 2023-02-03 02:51:48
  * @Introduce: 
 -->
 <div class="home">
@@ -59,7 +59,7 @@
                 <div class="settled-singer">
                     <div class="tit"><b>入驻歌手</b></div>
                     <div class="list">
-                        <div class="card" *ngFor="let item of singer"> 
+                        <div class="card" *ngFor="let item of singer" [routerLink]="['/singer',item.id]"> 
                             <div class="pic">
                                 <img [src]="item.picUrl" [alt]="item.name">
                             </div>

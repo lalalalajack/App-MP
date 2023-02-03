@@ -24,7 +24,7 @@ import { findIndex } from 'src/app/utils/array';
 })
 export class SheetInfoComponent implements OnInit, OnDestroy {
 
-  sheetInfo: SongSheet;
+  sheetInfo: SongSheet; // 保存歌单列表信息
 
   // 歌单描述
   description = {

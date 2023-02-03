@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2023-02-01 19:37:04
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-02 23:36:05
+ * @LastEditTime: 2023-02-03 17:12:05
  * @Introduce: 
 -->
 <div class="sheet-info wrap feature-wrap">
@@ -118,7 +118,7 @@
                         </td>
                         <td>
                             <ng-container *ngFor="let singer of item.ar; last as isLast">
-                                <a>{{singer.name}}</a>
+                                <a [routerLink]="['/singer',singer.id]">{{singer.name}}</a>
                                 <em [hidden]="isLast">/</em>
                             </ng-container>
                         </td>

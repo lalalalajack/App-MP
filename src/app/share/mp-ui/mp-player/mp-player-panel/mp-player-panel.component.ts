@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-31 02:59:41
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-02 20:04:30
+ * @LastEditTime: 2023-02-03 18:24:11
  * @Introduce: 
  */
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChildren, asNativeElements } from '@angular/core';
@@ -29,6 +29,7 @@ export class MpPlayerPanelComponent implements OnInit, OnChanges {
   @Output() onChangeSong: EventEmitter<Song> = new EventEmitter<Song>();
   @Output() onDeleteSong: EventEmitter<Song> = new EventEmitter<Song>();
   @Output() onClearSong = new EventEmitter<void>();   //清空歌曲列表
+  @Output() onToInfo = new EventEmitter<[string, number]>();   //将mp-player-panel的（click）事件提交到mp-player父组件触发
   //后续两个面板都需要
   @ViewChildren(MpScrollComponent) private mpScroll: QueryList<MpScrollComponent> //滚动条
 
@@ -196,6 +197,12 @@ export class MpPlayerPanelComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
+  }
+
+  //跳转
+  toInfo(evt: MouseEvent, path: [string, number]) {
+    evt.stopPropagation();
+    this.onToInfo.emit(path);
   }
 
 }

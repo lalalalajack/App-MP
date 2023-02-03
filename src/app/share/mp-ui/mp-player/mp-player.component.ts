@@ -1,8 +1,9 @@
+import { Router } from '@angular/router';
 /*
  * @Author: cwj
  * @Date: 2022-12-11 22:42:31
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-01 02:14:42
+ * @LastEditTime: 2023-02-03 18:23:05
  * @Introduce: 
  */
 import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
@@ -86,7 +87,8 @@ export class MpPlayerComponent implements OnInit {
     private store$: Store<AppStoreModule>,
     @Inject(DOCUMENT) private doc: Document,
     private nzModalServe: NzModalService,
-    private batchAction: BatchActionsService
+    private batchAction: BatchActionsService,
+    private router:Router
   ) {
     const appStore$ = this.store$.pipe(select(getPlayer));
     //select操作符非原生，是ngrx携带的
@@ -366,5 +368,12 @@ export class MpPlayerComponent implements OnInit {
     })
   }
 
-
+  //跳转,入参是一个元组类型
+  toInfo(path:[string,number]){
+    if(path[1]){
+      this.showVolumePanel = false;
+    this.showListPanel =false;
+    this.router.navigate(path);
+    }
+  }
 }

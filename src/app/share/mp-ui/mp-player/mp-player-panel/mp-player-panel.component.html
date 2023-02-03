@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-31 02:59:41
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-02 22:57:31
+ * @LastEditTime: 2023-02-03 18:26:39
  * @Introduce: 
 -->
 <div class="play-panel" [class.show]="show">
@@ -15,9 +15,9 @@
             </div>
             <span class="line"></span>
             <div class="clear-all" (click)="onClearSong.emit()">
-                <i class="icon trush" title="清除全部" ></i>清除全部
+                <i class="icon trush" title="清除全部"></i>清除全部
             </div>
-            <p class="playing-name">{{currentSong?.name}}</p>
+            <p class="playing-name" (click)="onToInfo.emit(['/songInfo',currentSong.id])">{{currentSong?.name}}</p>
             <!-- 子指令调用已创建的 EventEmitter 实例中的 emit(payload) 方法来触发一个事件 -->
             <i class="icon close" (click)="onClose.emit()"></i>
         </div>
@@ -40,12 +40,12 @@
                     </div>
                     <div class="singers clearfix ellipsis">
                         <div class="singer-item" *ngFor="let singer of item.ar;last as isLast">
-                            <a href="" class="col ellipsis">{{singer.name}}</a>
+                            <a class="col ellipsis" (click)="toInfo($event,['/singer',singer.id])">{{singer.name}}</a>
                             <span [hidden]="isLast">/</span>
                         </div>
                     </div>
                     <div class="col duration">{{(item.dt/1000)|formatTime}}</div>
-                    <div class="col link"></div>
+                    <div class="col link" (click)="toInfo($event,['/songInfo',item.id])"></div>
                 </li>
             </ul>
         </app-mp-scroll>

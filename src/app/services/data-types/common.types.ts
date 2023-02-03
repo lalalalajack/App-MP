@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-09 21:56:12
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-02 23:11:35
+ * @LastEditTime: 2023-02-03 03:11:24
  * @Introduce: 
  */
 //轮播图
@@ -34,15 +34,22 @@ export type SongSheet = {
     shareCount: number; //分享量
     commentCount: number; //评论数
     subscribed: boolean; //当前账户是否已经订阅（暂设）
-    tracks: Song[]; 
+    tracks: Song[];
 }
 
 //歌手
 export type Singer = {
     id: number;
     name: string;
+    alias:string[];
     picUrl: string;
     albumSize: number;//专辑数
+}
+
+//歌手详情（在歌手详情页面中和singer.service中使用该类型）
+export type SingerDetail = {
+    artist: Singer;
+    hotSongs: Song[];
 }
 
 //歌曲

@@ -2,13 +2,10 @@
  * @Author: cwj
  * @Date: 2022-12-11 22:42:31
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-01 01:11:12
+ * @LastEditTime: 2023-02-03 18:28:01
  * @Introduce: 
 -->
-<div class="m-player" 
-appClickoutside
-[bindFlag]="bindFlag"
-(onClickOutSide)="onClickOutSide()">
+<div class="m-player" appClickoutside [bindFlag]="bindFlag" (onClickOutSide)="onClickOutSide()">
     <div class="lock">
         <div class="left"><i></i></div>
     </div>
@@ -24,7 +21,7 @@ appClickoutside
             <!-- 小图片 -->
             <div class="head">
                 <img [src]="picUrl" alt="">
-                <i class="mask"></i>
+                <i class="mask" (click)="toInfo(['/songInfo',currentSong.id])"></i>
             </div>
             <div class="play">
                 <!-- 歌曲和歌手名字 -->
@@ -32,7 +29,7 @@ appClickoutside
                     <p class="ellipsis margin-bottom-none">{{currentSong?.name}}</p>
                     <ul class="songs clearfix margin-bottom-none">
                         <li *ngFor="let item of currentSong?.ar;last as isLast">
-                            <a>{{item.name}}</a>
+                            <a (click)="toInfo(['/singer',item.id])">{{item.name}}</a>
                             <span [hidden]="isLast">/</span>
                         </li>
                     </ul>
@@ -68,9 +65,18 @@ appClickoutside
             </div>
             <!-- 音乐面板 -->
             <!-- 父指令通过事件绑定 (eventName) 的方式监听该事件，如下的（onClose)，并通过 $event 对象来获取 payload 对象,下面的是监听子组件的事件的发生后，为showListPanel赋值 -->
-            <app-mp-player-panel [songList]="songList" [currentSong]="currentSong" [show]="showListPanel"
-                [playing]="playing" (onClose)="showListPanel=false" (onChangeSong)="onChangeSong($event)"
-                (onDeleteSong)="onDeleteSong($event)" (onClearSong)="onClearSong()"></app-mp-player-panel>
+            <app-mp-player-panel 
+            [songList]="songList" 
+            [currentSong]="currentSong" 
+            [show]="showListPanel"
+            [playing]="playing" 
+            (onClose)="showListPanel=false" 
+            (onChangeSong)="onChangeSong($event)"
+            (onDeleteSong)="onDeleteSong($event)" 
+            (onClearSong)="onClearSong()"
+            (onToInfo)="toInfo($event)"
+            >
+            </app-mp-player-panel>
         </div>
     </div>
     <!-- 开始时没有音乐在放，可选参数 -->
