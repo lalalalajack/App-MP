@@ -3,16 +3,34 @@ import { Router } from '@angular/router';
  * @Author: cwj
  * @Date: 2022-12-11 22:42:31
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-03 18:23:05
- * @Introduce: 
+ * @LastEditTime: 2023-02-06 00:38:47
+ * @Introduce:
  */
-import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Inject,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Song } from 'src/app/services/data-types/common.types';
 import { AppStoreModule } from 'src/app/store';
-import { getCurrentIndex, getCurrentSong, getPlayList, getPlayMode, getPlayer, getSongList } from 'src/app/store/selectors/player.selector';
+import {
+  getCurrentIndex,
+  getCurrentSong,
+  getPlayList,
+  getPlayMode,
+  getPlayer,
+  getSongList,
+} from 'src/app/store/selectors/player.selector';
 import { PlayMode } from './player-type';
-import { SetCurrentIndex, SetPlayList, SetPlayMode, SetSongList } from 'src/app/store/actions/player.action';
+import {
+  SetCurrentIndex,
+  SetPlayList,
+  SetPlayMode,
+  SetSongList,
+} from 'src/app/store/actions/player.action';
 import { Subscription, from, fromEvent } from 'rxjs';
 import { DOCUMENT } from '@angular/common';
 import { findIndex, shuffle } from 'src/app/utils/array';
@@ -20,25 +38,50 @@ import { MpPlayerPanelComponent } from './mp-player-panel/mp-player-panel.compon
 import { flush } from '@angular/core/testing';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { BatchActionsService } from 'src/app/store/batch-actions.service';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
 
-
-const modeTypes: PlayMode[] = [{
-  type: 'loop',
-  label: '循环'
-}, {
-  type: 'random',
-  label: '随机'
-}, {
-  type: 'singleLoop',
-  label: '单曲循环'
-}];
+const modeTypes: PlayMode[] = [
+  {
+    type: 'loop',
+    label: '循环',
+  },
+  {
+    type: 'random',
+    label: '随机',
+  },
+  {
+    type: 'singleLoop',
+    label: '单曲循环',
+  },
+];
 
 @Component({
   selector: 'app-mp-player',
   templateUrl: './mp-player.component.html',
-  styleUrls: ['./mp-player.component.less']
+  styleUrls: ['./mp-player.component.less'],
+  animations: [
+    // 创建动画, 动画名称为 showHide
+    trigger('showHide', [
+      // 指定元素样式
+      state('show', style({ bottom: 0 })),
+      state('hide', style({ bottom: -71 })),
+      // // 指定入场动画 注意: 字符串两边不能有空格, 箭头两边可以有也可以没有空格
+      transition('show=>hide', [animate('0.3s')]),
+      transition('hide=>show', [animate('0.1s')]),
+    ]),
+  ],
 })
 export class MpPlayerComponent implements OnInit {
+  showPlayer = 'hide'; // 动画初始状态
+  isLocked = false; // 面板是否被锁
+  animating = false; // 是否正在动画
+
   percent = 0;
   bufferPercent = 0;
 
@@ -82,13 +125,12 @@ export class MpPlayerComponent implements OnInit {
   @ViewChild(MpPlayerPanelComponent, { static: false }) private playerPanel;
   private audioEl: HTMLAudioElement;
 
-
   constructor(
     private store$: Store<AppStoreModule>,
     @Inject(DOCUMENT) private doc: Document,
     private nzModalServe: NzModalService,
     private batchAction: BatchActionsService,
-    private router:Router
+    private router: Router
   ) {
     const appStore$ = this.store$.pipe(select(getPlayer));
     //select操作符非原生，是ngrx携带的
@@ -102,26 +144,32 @@ export class MpPlayerComponent implements OnInit {
     //   console.log('getCurrentIndex:', index);
     // });
 
-    const stateArr = [{
-      type: getSongList,
-      cb: list => this.watchList(list, 'songList')
-    }, {
-      type: getPlayList,
-      cb: list => this.watchList(list, 'playList')
-    }, {
-      type: getCurrentIndex,
-      cb: index => this.watchCurrentIndex(index)
-    }, {
-      type: getPlayMode,
-      cb: mode => this.watchPlayMode(mode)
-    }, {
-      type: getCurrentSong,
-      cb: song => this.watchCurrentSong(song)
-    }];
+    const stateArr = [
+      {
+        type: getSongList,
+        cb: (list) => this.watchList(list, 'songList'),
+      },
+      {
+        type: getPlayList,
+        cb: (list) => this.watchList(list, 'playList'),
+      },
+      {
+        type: getCurrentIndex,
+        cb: (index) => this.watchCurrentIndex(index),
+      },
+      {
+        type: getPlayMode,
+        cb: (mode) => this.watchPlayMode(mode),
+      },
+      {
+        type: getCurrentSong,
+        cb: (song) => this.watchCurrentSong(song),
+      },
+    ];
 
     stateArr.forEach((item: any) => {
       appStore$.pipe(select(item.type)).subscribe(item.cb);
-    })
+    });
   }
   private watchCurrentSong(song: Song) {
     if (song) {
@@ -139,13 +187,11 @@ export class MpPlayerComponent implements OnInit {
       let list = this.songList.slice();
       if (mode.type === 'random') {
         list = shuffle(this.songList);
-
       }
       //改变播放模式的时候，当前放的歌曲照样放
       this.updateCurrentIndex(list, this.currentSong);
       //console.log("list:", list);
       this.store$.dispatch(SetPlayList({ playList: list }));
-
     }
   }
 
@@ -159,14 +205,14 @@ export class MpPlayerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.audioEl = this.audio.nativeElement
+    this.audioEl = this.audio.nativeElement;
     //console.log('audio:',this.audio.nativeElement);
   }
 
   //更新当前在播放的歌的index
   private updateCurrentIndex(list: Song[], song: Song) {
     //寻找当前正在播放的歌在shuffle后的index
-    //const newIndex = list.findIndex(item => item.id === song.id); 
+    //const newIndex = list.findIndex(item => item.id === song.id);
     const newIndex = findIndex(list, song);
     this.store$.dispatch(SetCurrentIndex({ currentIndex: newIndex }));
   }
@@ -182,14 +228,15 @@ export class MpPlayerComponent implements OnInit {
   changeMode() {
     // const temp = modeTypes[++this.modeCount % 3];
     // console.log(temp);
-    this.store$.dispatch(SetPlayMode({ playMode: modeTypes[++this.modeCount % 3] }))
+    this.store$.dispatch(
+      SetPlayMode({ playMode: modeTypes[++this.modeCount % 3] })
+    );
   }
 
   //点击切换列表面板的显示
   toggleListPanel() {
     //有歌的时候才显示这块面板
-    if (this.songList.length)
-      this.togglePanel('showListPanel');
+    if (this.songList.length) this.togglePanel('showListPanel');
   }
 
   //点击切换音量面板的显示
@@ -205,7 +252,7 @@ export class MpPlayerComponent implements OnInit {
     } else {
       this.bindFlag = false;
     } */
-    this.bindFlag = (this.showVolumePanel || this.showListPanel);
+    this.bindFlag = this.showVolumePanel || this.showListPanel;
   }
 
   /* bindDocumentClickListener(type: string) {
@@ -233,7 +280,6 @@ export class MpPlayerComponent implements OnInit {
     //this.currentSong = song;
     this.updateCurrentIndex(this.playList, song);
   }
-
 
   // 控制音量
   onVolumeChange(per: number) {
@@ -275,7 +321,9 @@ export class MpPlayerComponent implements OnInit {
 
   // 上一曲
   onPrev(index: number) {
-    if (!this.songReady) { return; }
+    if (!this.songReady) {
+      return;
+    }
     if (this.playList.length === 1) {
       this.loop();
     } else {
@@ -284,10 +332,11 @@ export class MpPlayerComponent implements OnInit {
     }
   }
 
-
   // 下一曲
   onNext(index: number) {
-    if (!this.songReady) { return; }
+    if (!this.songReady) {
+      return;
+    }
     if (this.playList.length === 1) {
       this.loop();
     } else {
@@ -320,8 +369,6 @@ export class MpPlayerComponent implements OnInit {
     }
   }
 
-
-
   //点击歌单播放触发事件
   onCanplay() {
     this.songReady = true;
@@ -345,7 +392,6 @@ export class MpPlayerComponent implements OnInit {
     if (buffered.length && this.bufferPercent < 100) {
       this.bufferPercent = (buffered.end(0) / this.duration) * 100;
     }
-
   }
 
   //获取当前正在播放歌曲照片
@@ -361,19 +407,26 @@ export class MpPlayerComponent implements OnInit {
   //清空歌曲(为了防止误操作，使用ngZorro的组件)
   onClearSong() {
     this.nzModalServe.confirm({
-      nzTitle: "确认清空列表？",
+      nzTitle: '确认清空列表？',
       nzOnOk: () => {
         this.batchAction.clearSong();
-      }
-    })
+      },
+    });
   }
 
   //跳转,入参是一个元组类型
-  toInfo(path:[string,number]){
-    if(path[1]){
+  toInfo(path: [string, number]) {
+    if (path[1]) {
       this.showVolumePanel = false;
-    this.showListPanel =false;
-    this.router.navigate(path);
+      this.showListPanel = false;
+      this.router.navigate(path);
+    }
+  }
+
+  // 面板动画
+  togglePlayer(type: string) {
+    if (!this.isLocked && !this.animating) {
+      this.showPlayer = type;
     }
   }
 }
