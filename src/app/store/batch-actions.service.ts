@@ -1,39 +1,50 @@
+import { SetCurrentAction } from './actions/player.action';
 /*
  * @Author: cwj
  * @Date: 2023-02-01 00:06:20
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-02 22:26:23
+ * @LastEditTime: 2023-02-06 02:40:09
  * @Introduce: 优化处理，封装批量提交
  */
 import { Injectable } from '@angular/core';
 import { AppStoreModule } from '.';
 import { Song } from '../services/data-types/common.types';
 import { Store, select } from '@ngrx/store';
-import { PlayState } from './reducers/player.reducer';
+import { CurrentActions, PlayState } from './reducers/player.reducer';
 import { getPlayer } from './selectors/player.selector';
-import { SetCurrentIndex, SetPlayList, SetSongList } from './actions/player.action';
+import {
+  SetCurrentIndex,
+  SetPlayList,
+  SetSongList,
+} from './actions/player.action';
 import { findIndex, shuffle } from '../utils/array';
 
 @Injectable({
-  providedIn: AppStoreModule
+  providedIn: AppStoreModule,
 })
 export class BatchActionsService {
   private playState: PlayState;
   constructor(private store$: Store<AppStoreModule>) {
-    this.store$.pipe(select(getPlayer)).subscribe(res => this.playState = <PlayState>res);
+    this.store$
+      .pipe(select(getPlayer))
+      .subscribe((res) => (this.playState = <PlayState>res));
   }
 
   //播放列表
-  selectPlayList({ list, index }: { list: Song[], index: number }) {
+  selectPlayList({ list, index }: { list: Song[]; index: number }) {
     this.store$.dispatch(SetSongList({ songList: list }));
     //首页初始化时先订阅当前播放信息，在点击播放歌单时判断当前播放模式是否为随机，是则打乱歌单数组，重新计算当前歌曲的索引。
-    let trueIndex = index, trueList = list.slice();
-    if (this.playState.playMode.type === "random") {
+    let trueIndex = index,
+      trueList = list.slice();
+    if (this.playState.playMode.type === 'random') {
       trueList = shuffle(list || []);
       trueIndex = findIndex(trueList, list[trueIndex]);
     }
     this.store$.dispatch(SetPlayList({ playList: trueList }));
     this.store$.dispatch(SetCurrentIndex({ currentIndex: trueIndex }));
+    this.store$.dispatch(
+      SetCurrentAction({ currentAction: CurrentActions.Play })
+    );
   }
 
   //添加歌曲
@@ -63,6 +74,9 @@ export class BatchActionsService {
     //点击播放按钮
     if (insertIndex !== this.playState.currentIndex) {
       this.store$.dispatch(SetCurrentIndex({ currentIndex: insertIndex }));
+      this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Play }));
+    }else{
+      this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Add }));
     }
   }
 
@@ -70,7 +84,7 @@ export class BatchActionsService {
   insertSongs(songs: Song[], isPlay) {
     const songList = this.playState.songList.slice();
     const playList = this.playState.playList.slice();
-    songs.forEach(song => {
+    songs.forEach((song) => {
       const pIndex = findIndex(playList, song);
       if (pIndex === -1) {
         //歌曲尚未在列表里
@@ -80,6 +94,7 @@ export class BatchActionsService {
     });
     this.store$.dispatch(SetSongList({ songList }));
     this.store$.dispatch(SetPlayList({ playList }));
+    this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Play }));
   }
 
   //删除歌曲
@@ -100,13 +115,14 @@ export class BatchActionsService {
     this.store$.dispatch(SetSongList({ songList }));
     this.store$.dispatch(SetPlayList({ playList }));
     this.store$.dispatch(SetCurrentIndex({ currentIndex }));
+    this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Delete }));
   }
 
-  //清空歌曲(为了防止误操作，使用ngzorro的组件)
+  //清空歌曲(为了防止误操作，使用ngZorro的组件)
   clearSong() {
     this.store$.dispatch(SetSongList({ songList: [] }));
     this.store$.dispatch(SetPlayList({ playList: [] }));
     this.store$.dispatch(SetCurrentIndex({ currentIndex: -1 }));
+    this.store$.dispatch(SetCurrentAction({ currentAction: CurrentActions.Clear }));
   }
-
 }

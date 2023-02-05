@@ -1,11 +1,14 @@
-import { Router } from '@angular/router';
+import { timer } from 'rxjs';
 /*
  * @Author: cwj
  * @Date: 2022-12-11 22:42:31
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-06 00:38:47
+ * @LastEditTime: 2023-02-06 03:17:29
  * @Introduce:
  */
+import { CurrentActions } from './../../../store/reducers/player.reducer';
+import { getCurrentAction } from './../../../store/selectors/player.selector';
+import { Router } from '@angular/router';
 import {
   Component,
   ElementRef,
@@ -26,6 +29,7 @@ import {
 } from 'src/app/store/selectors/player.selector';
 import { PlayMode } from './player-type';
 import {
+  SetCurrentAction,
   SetCurrentIndex,
   SetPlayList,
   SetPlayMode,
@@ -39,6 +43,7 @@ import { flush } from '@angular/core/testing';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { BatchActionsService } from 'src/app/store/batch-actions.service';
 import {
+  AnimationEvent,
   animate,
   state,
   style,
@@ -61,6 +66,11 @@ const modeTypes: PlayMode[] = [
   },
 ];
 
+enum TipTitle {
+  Add = '已添加到列表',
+  Play = '已开始播放',
+}
+
 @Component({
   selector: 'app-mp-player',
   templateUrl: './mp-player.component.html',
@@ -78,6 +88,12 @@ const modeTypes: PlayMode[] = [
   ],
 })
 export class MpPlayerComponent implements OnInit {
+  //控制文字提示（tooltip）
+  controlTooltip = {
+    title: '',
+    show: false,
+  };
+
   showPlayer = 'hide'; // 动画初始状态
   isLocked = false; // 面板是否被锁
   animating = false; // 是否正在动画
@@ -165,6 +181,10 @@ export class MpPlayerComponent implements OnInit {
         type: getCurrentSong,
         cb: (song) => this.watchCurrentSong(song),
       },
+      {
+        type: getCurrentAction,
+        cb: (action) => this.watchCurrentAction(action),
+      },
     ];
 
     stateArr.forEach((item: any) => {
@@ -202,6 +222,41 @@ export class MpPlayerComponent implements OnInit {
   private watchCurrentIndex(index: number) {
     //console.log('index :', index);
     this.currentIndex = index;
+  }
+
+  private watchCurrentAction(action: CurrentActions) {
+    const title = TipTitle[CurrentActions[action]];
+    console.log('action:', CurrentActions[action]);
+    if (title) {
+      this.controlTooltip.title = title;
+      if (this.showPlayer === 'hide') {
+        //如果播放器是收起的状态，先让它弹起来
+        this.togglePlayer('show');
+      } else {
+        this.showToolTip();
+      }
+    }
+    this.store$.dispatch(
+      SetCurrentAction({ currentAction: CurrentActions.Other })
+    );
+  }
+
+  onAnimateDone(event: AnimationEvent) {
+    this.animating = false;
+    if (event.toState === 'show' && this.controlTooltip.title) {
+      // 动画是从hide到show的过程
+      this.showToolTip();
+    }
+  }
+
+  showToolTip() {
+    this.controlTooltip.show = true;
+    timer(1500).subscribe(() => {
+      this.controlTooltip = {
+        title: '',
+        show: false,
+      };
+    });
   }
 
   ngOnInit(): void {

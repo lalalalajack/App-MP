@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-11 22:42:02
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-01 01:09:01
+ * @LastEditTime: 2023-02-06 02:49:53
  * @Introduce: 
  */
 import { NgModule } from '@angular/core';
@@ -15,7 +15,7 @@ import { MpPlayerPanelComponent } from './mp-player-panel/mp-player-panel.compon
 import { MpScrollComponent } from './mp-scroll/mp-scroll.component';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { ClickoutsideDirective } from '../../directives/clickoutside.directive';
-
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 
 @NgModule({
@@ -30,6 +30,7 @@ import { ClickoutsideDirective } from '../../directives/clickoutside.directive';
         CommonModule,
         MpSliderModule,
         FormsModule,
+        NzToolTipModule
     ],
     exports: [
         MpPlayerComponent,
