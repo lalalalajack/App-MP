@@ -16,7 +16,7 @@ import { Directive, ElementRef, EventEmitter, Inject, Input, OnChanges, Output, 
 export class ClickoutsideDirective implements OnChanges{
 
   private handleClick: () => void;
-  @Output() onClickOutSide = new EventEmitter<void>(); // 发射解绑
+  @Output() onClickOutSide = new EventEmitter<any>(); // 发射解绑
   @Input() bindFlag = false; // 是否需要绑定
 
   constructor(
@@ -30,9 +30,11 @@ export class ClickoutsideDirective implements OnChanges{
           if (this.bindFlag) {
               this.handleClick = this.rd.listen(this.doc, 'click', fun => {
                 //console.log('doc click');
+                const target = fun.target;
                   const isContain = this.el.nativeElement.contains(fun.target)
+                  //console.log('isContain',isContain);
                   if (!isContain) {
-                      this.onClickOutSide.emit();
+                      this.onClickOutSide.emit(target);
                   }
               })
           } else {

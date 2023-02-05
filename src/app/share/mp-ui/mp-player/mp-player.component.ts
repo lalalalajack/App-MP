@@ -3,7 +3,7 @@ import { timer } from 'rxjs';
  * @Author: cwj
  * @Date: 2022-12-11 22:42:31
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-06 03:17:29
+ * @LastEditTime: 2023-02-06 03:51:30
  * @Introduce:
  */
 import { CurrentActions } from './../../../store/reducers/player.reducer';
@@ -192,8 +192,8 @@ export class MpPlayerComponent implements OnInit {
     });
   }
   private watchCurrentSong(song: Song) {
+    this.currentSong = song;
     if (song) {
-      this.currentSong = song;
       this.duration = song.dt / 1000;
     }
 
@@ -273,10 +273,12 @@ export class MpPlayerComponent implements OnInit {
   }
 
   // 点击面板外部
-  onClickOutSide() {
-    this.showVolumePanel = false;
-    this.showListPanel = false;
-    this.bindFlag = false;
+  onClickOutSide(target: HTMLElement) {
+    if (target.dataset['act'] !== 'delete') {
+      this.showVolumePanel = false;
+      this.showListPanel = false;
+      this.bindFlag = false;
+    }
   }
 
   //改变模式
@@ -413,6 +415,13 @@ export class MpPlayerComponent implements OnInit {
     } else {
       this.onNext(this.currentIndex + 1);
     }
+  }
+
+  //播放错误，此时currentSong为undefine
+  onError() {
+    console.log('onError', this.currentSong);
+    this.playing = false;
+    this.bufferPercent = 0;
   }
 
   // 单曲循环
