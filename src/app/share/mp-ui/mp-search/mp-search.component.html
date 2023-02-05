@@ -1,0 +1,15 @@
+<!--
+ * @Author: cwj
+ * @Date: 2023-02-03 22:34:47
+ * @LastEditors: cwj
+ * @LastEditTime: 2023-02-05 20:41:44
+ * @Introduce: 
+-->
+<ng-template #defaultView>
+    <div class="search" #search>
+        <nz-input-group nzSuffixIcon="search">
+            <input type="text" #nzInput nz-input placeholder="歌单/歌手/歌曲" (focus)="onFocus()" (blur)="onBlur()"/>
+        </nz-input-group>
+    </div>
+</ng-template>
+<ng-container *ngTemplateOutlet="customView?customView: defaultView"></ng-container>

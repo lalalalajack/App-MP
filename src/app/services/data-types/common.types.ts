@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-09 21:56:12
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-03 03:11:24
+ * @LastEditTime: 2023-02-05 04:27:03
  * @Introduce: 
  */
 //轮播图
@@ -80,4 +80,10 @@ export type SheetList = {
     total: number,
 }
 
+// 搜索关键字返回值
+export type SearchResult = {
+    artists?: Singer[],
+    playlists?: SongSheet[],
+    songs?: Song[],
+}
 

@@ -11,6 +11,7 @@ import { AppComponent } from './app.component';
 
 import { CoreModule } from './core/core.module';
 import { MpPlayerModule } from "./share/mp-ui/mp-player/mp-player.module";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import { MpPlayerModule } from "./share/mp-ui/mp-player/mp-player.module";
     imports: [
         CoreModule,
         MpPlayerModule,
+        BrowserAnimationsModule,
     ]
 })
 export class AppModule { }
