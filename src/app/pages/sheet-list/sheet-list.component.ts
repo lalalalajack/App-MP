@@ -10,7 +10,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SheetList } from 'src/app/services/data-types/common.types';
 import { SheetParams, SheetService } from 'src/app/services/sheet.service';
-import { BatchActionsService } from 'src/app/store/batch-actions.service';
+import { BatchActionsService } from 'src/app/store/palyer-batch-actions.service';
 
 @Component({
   selector: 'app-sheet-list',

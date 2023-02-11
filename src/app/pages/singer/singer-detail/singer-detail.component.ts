@@ -1,4 +1,4 @@
-import { BatchActionsService } from './../../../store/batch-actions.service';
+import { BatchActionsService } from '../../../store/palyer-batch-actions.service';
 import { SongService } from './../../../services/song.service';
 import { SingerDetail, Song } from './../../../services/data-types/common.types';
 import { Component, OnDestroy, OnInit } from '@angular/core';

@@ -1,8 +1,9 @@
+import { MpLayerModule } from './mp-layer/mp-layer.module';
 /*
  * @Author: cwj
  * @Date: 2022-12-11 18:05:35
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-03 22:32:53
+ * @LastEditTime: 2023-02-11 15:26:43
  * @Introduce: 
  */
 import { NgModule } from '@angular/core';
@@ -12,7 +13,6 @@ import { MpSliderModule } from './mp-slider/mp-slider.module';
 import { SingleSheetComponent } from './single-sheet/single-sheet.component';
 import { MpSearchModule } from './mp-search/mp-search.module';
 
-
 @NgModule({
   declarations: [
     SingleSheetComponent,
@@ -21,14 +21,16 @@ import { MpSearchModule } from './mp-search/mp-search.module';
   imports: [
     MpPlayerModule,
     MpSliderModule,
-    MpSearchModule
+    MpSearchModule,
+    MpLayerModule
   ],
   exports:[
     SingleSheetComponent,
     PlayCountPipe,
     MpPlayerModule,
     MpSliderModule,
-    MpSearchModule
+    MpSearchModule,
+    MpLayerModule
   ]
 })
 export class MpUiModule { }

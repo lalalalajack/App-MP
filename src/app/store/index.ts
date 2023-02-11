@@ -1,8 +1,9 @@
+import { MemberState, memberReducer } from './reducers/member.reducer';
 /*
  * @Author: cwj
  * @Date: 2022-12-22 08:43:25
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-06 02:13:45
+ * @LastEditTime: 2023-02-11 16:27:59
  * @Introduce: ngrx初始化播放器 在配置模块下注入StoreModule，定义启动reducer，在actions中定义动作，reducer中注册使用。
  */
 import { NgModule } from '@angular/core';
@@ -16,7 +17,7 @@ import { environment } from 'src/environments/environment';
 @NgModule({
   declarations: [],
   imports: [
-    StoreModule.forRoot({ player: playerReducer },{ 
+    StoreModule.forRoot({ player: playerReducer , member:memberReducer},{ 
       runtimeChecks: {
         strictStateImmutability: true,
         strictActionImmutability: true,

@@ -1,3 +1,10 @@
+/*
+ * @Author: cwj
+ * @Date: 2023-02-03 22:34:47
+ * @LastEditors: cwj
+ * @LastEditTime: 2023-02-05 22:12:26
+ * @Introduce:
+ */
 import { MpSearchPanelComponent } from './mp-search-panel/mp-search-panel.component';
 import {
   Overlay,
@@ -19,13 +26,6 @@ import {
   SimpleChanges,
   ViewContainerRef,
 } from '@angular/core';
-/*
- * @Author: cwj
- * @Date: 2023-02-03 22:34:47
- * @LastEditors: cwj
- * @LastEditTime: 2023-02-05 22:12:26
- * @Introduce:
- */
 import { Component, OnInit } from '@angular/core';
 import {
   debounceTime,
@@ -84,11 +84,12 @@ export class MpSearchComponent implements OnInit, AfterViewInit, OnChanges {
         },
       ])
       .withLockedPosition(true); // 浮层定位策略(详情可见浮层overlay的api的doc)
+    // OverlayRef 是一个 PortalOutlet。一旦创建它，就可以为它附着一个 Portal 来添加内容。
     this.overlayRef = this.overlay.create({
       hasBackdrop: true, // 浮层是否有背景板
       positionStrategy,
       scrollStrategy: this.overlay.scrollStrategies.reposition(),
-    }); // OverlayRef 是一个 PortalOutlet。一旦创建它，就可以为它附着一个 Portal 来添加内容。
+    });
     const panelPortal = new ComponentPortal(
       MpSearchPanelComponent,
       this.viewContainerRef

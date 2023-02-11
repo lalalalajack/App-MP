@@ -1,0 +1,14 @@
+<!--
+ * @Author: cwj
+ * @Date: 2023-02-10 20:07:45
+ * @LastEditors: cwj
+ * @LastEditTime: 2023-02-11 22:40:38
+ * @Introduce: 
+-->
+<div class="m-layer" #modalContainer [@showHide]="showModal">
+    <div class="zbar">
+        <div class="zttl f-thide">这是标题</div>
+    </div>
+    <ng-content ></ng-content>
+    <div class="zcls" title="关闭" (click)="hide()"></div>
+</div>

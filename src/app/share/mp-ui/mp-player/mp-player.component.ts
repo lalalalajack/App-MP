@@ -41,7 +41,7 @@ import { findIndex, shuffle } from 'src/app/utils/array';
 import { MpPlayerPanelComponent } from './mp-player-panel/mp-player-panel.component';
 import { flush } from '@angular/core/testing';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { BatchActionsService } from 'src/app/store/batch-actions.service';
+import { BatchActionsService } from 'src/app/store/palyer-batch-actions.service';
 import {
   AnimationEvent,
   animate,

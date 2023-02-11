@@ -7,7 +7,7 @@ import { Lyric, Song } from 'src/app/services/data-types/common.types';
 import { SongService } from 'src/app/services/song.service';
 import { BaseLyricLine, MpLyric } from 'src/app/share/mp-ui/mp-player/mp-player-panel/mp-lyric';
 import { AppStoreModule } from 'src/app/store';
-import { BatchActionsService } from 'src/app/store/batch-actions.service';
+import { BatchActionsService } from 'src/app/store/palyer-batch-actions.service';
 import { getCurrentSong, getPlayer } from 'src/app/store/selectors/player.selector';
 
 @Component({

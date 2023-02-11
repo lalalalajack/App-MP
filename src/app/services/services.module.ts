@@ -2,20 +2,21 @@
  * @Author: cwj
  * @Date: 2022-12-09 19:22:54
  * @LastEditors: cwj
- * @LastEditTime: 2022-12-12 16:53:42
- * @Introduce: 
+ * @LastEditTime: 2023-02-11 23:26:57
+ * @Introduce:
  */
-import { InjectionToken, NgModule } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { InjectionToken, NgModule, PLATFORM_ID } from '@angular/core';
 
 export const API_CONFIG = new InjectionToken('ApiConfigToken');
+export const WINDOW = new InjectionToken('Window');
 
 @NgModule({
-  declarations: [
-  ],
-  imports: [
-  ],
+  declarations: [],
+  imports: [],
   providers: [
-    { provide: API_CONFIG, useValue: 'http://localhost:3000/' }
-  ]
+    { provide: API_CONFIG, useValue: 'http://localhost:3000/' },
+    { provide: WINDOW, useValue: 'Window' }
+  ],
 })
-export class ServicesModule { }
+export class ServicesModule {}

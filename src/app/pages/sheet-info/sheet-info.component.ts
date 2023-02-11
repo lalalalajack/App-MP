@@ -13,7 +13,7 @@ import { Observable, Subject, map, takeUntil } from 'rxjs';
 import { Song, SongSheet } from 'src/app/services/data-types/common.types';
 import { SongService } from 'src/app/services/song.service';
 import { AppStoreModule } from 'src/app/store';
-import { BatchActionsService } from 'src/app/store/batch-actions.service';
+import { BatchActionsService } from 'src/app/store/palyer-batch-actions.service';
 import { getPlayer, getCurrentSong } from 'src/app/store/selectors/player.selector';
 import { findIndex } from 'src/app/utils/array';
 

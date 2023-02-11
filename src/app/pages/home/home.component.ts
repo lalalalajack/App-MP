@@ -1,8 +1,9 @@
+import { MemberBatchActionsService } from './../../store/member-batch-actions.service';
 /*
  * @Author: cwj
  * @Date: 2022-12-09 21:25:06
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-01 21:02:16
+ * @LastEditTime: 2023-02-11 21:53:25
  * @Introduce: 
  */
 import { Component, OnInit, ViewChild } from '@angular/core';
@@ -15,7 +16,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SheetService } from 'src/app/services/sheet.service';
 import { Store, select } from '@ngrx/store';
 import { AppStoreModule } from 'src/app/store';
-import { BatchActionsService } from 'src/app/store/batch-actions.service';
+import { BatchActionsService } from 'src/app/store/palyer-batch-actions.service';
 
 @Component({
   selector: 'app-home',
@@ -40,7 +41,8 @@ export class HomeComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private SheetService: SheetService,
-    private batchAction: BatchActionsService
+    private batchAction: BatchActionsService,
+    private memberBatchAction: MemberBatchActionsService
   ) {
     //route.data 是一个observable对象 包含了route的一些配置，详情见home-routing.module.ts文件
     //由于routedata包含了data和resolve，而我们只需要resolve的数据，用map
@@ -109,6 +111,11 @@ export class HomeComponent implements OnInit {
   //点击歌单dom跳转链接到歌单详情
   toInfo(id: number) {
     this.router.navigate(['/sheetInfo', id]);
+  }
+
+  //打开弹窗
+  openModal(){
+    this.memberBatchAction.controlModal();
   }
 
 }

@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { BatchActionsService } from './batch-actions.service';
+import { BatchActionsService } from './palyer-batch-actions.service';
 
 describe('BatchActionsService', () => {
   let service: BatchActionsService;
