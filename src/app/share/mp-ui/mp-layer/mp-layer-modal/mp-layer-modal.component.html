@@ -2,13 +2,29 @@
  * @Author: cwj
  * @Date: 2023-02-10 20:07:45
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-11 22:40:38
+ * @LastEditTime: 2023-02-12 19:08:28
  * @Introduce: 
 -->
-<div class="m-layer" #modalContainer [@showHide]="showModal">
+<div class="m-layer" #modalContainer [@showHide]="showModal" cdkDragBoundary=".cdk-overlay-container" cdkDrag>
     <div class="zbar">
-        <div class="zttl f-thide">这是标题</div>
+        <div class="zttl f-thide" cdkDragHandle>{{this.currentModalType}}</div>
     </div>
-    <ng-content ></ng-content>
+    <ng-container [ngSwitch]="currentModalType">
+        <ng-container *ngSwitchCase="'loginByPhone'">
+          <ng-content select="[name=login]"></ng-content>
+        </ng-container>
+        <ng-container *ngSwitchCase="'register'">
+          <p>sauiwfawfwf</p>
+        </ng-container>
+        <ng-container *ngSwitchCase="'like'">
+          <ng-content select="[name=like]"></ng-content>
+        </ng-container>
+        <ng-container *ngSwitchCase="'share'">
+          <ng-content select="[name=share]"></ng-content>
+        </ng-container>
+        <ng-container *ngSwitchDefault>
+          <ng-content></ng-content>
+        </ng-container>
+      </ng-container>
     <div class="zcls" title="关闭" (click)="hide()"></div>
 </div>

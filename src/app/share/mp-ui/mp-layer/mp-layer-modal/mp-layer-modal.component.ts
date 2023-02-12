@@ -11,7 +11,7 @@ import {
  * @Author: cwj
  * @Date: 2023-02-10 20:07:45
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-11 23:50:00
+ * @LastEditTime: 2023-02-12 20:21:21
  * @Introduce:
  */
 import {
@@ -61,7 +61,7 @@ import {
 export class MpLayerModalComponent implements OnInit, AfterViewInit {
   showModal = 'hide'; //控制弹窗的显示
   private visible = false; //弹窗的显示或者隐藏
-  private currentModalType = ModalTypes.Default; //当前处于的弹窗类型
+  currentModalType = ModalTypes.Default; //当前处于的弹窗类型
   private overlayRef: OverlayRef; //浮层实例，管理特定浮层
   private scrollStrategy: BlockScrollStrategy; //阻止滚动API
   private overlayContainerEl: HTMLElement;
@@ -77,7 +77,7 @@ export class MpLayerModalComponent implements OnInit, AfterViewInit {
     private cdr: ChangeDetectorRef, //变更策略引用API
     private memberBatchActon: MemberBatchActionsService,
     private rd: Renderer2, //渲染器
-    private overlayContainerServe: OverlayContainer
+    private overlayContainerServe: OverlayContainer //所有浮层都会渲染到其中的容器。
   ) {
     const appStore$ = this.store$.pipe(select(getMember));
     appStore$
@@ -90,6 +90,7 @@ export class MpLayerModalComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    //该方法返回浮层的容器元素。它会在第一次调用时惰性创建该元素，以便在非浏览器环境中使用该容器。
     this.overlayContainerEl = this.overlayContainerServe.getContainerElement();
     this.listenResizeToCenter();
   }
@@ -148,6 +149,7 @@ export class MpLayerModalComponent implements OnInit, AfterViewInit {
   watchModalType(type: ModalTypes): void {
     if (this.currentModalType !== type) {
       this.currentModalType = type;
+      this.cdr.markForCheck(); // 手动触发
     }
   }
 

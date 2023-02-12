@@ -115,7 +115,7 @@ export class HomeComponent implements OnInit {
 
   //打开弹窗
   openModal(){
-    this.memberBatchAction.controlModal();
+    this.memberBatchAction.controlModal(true);
   }
 
 }

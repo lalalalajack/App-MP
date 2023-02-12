@@ -27,12 +27,12 @@
                                         <i nz-icon nzType="down" nzTheme="outline"></i>
                                     </div>
                                     <ul>
-                                        <li nz-menu-item>
-                                            <i nz-icon nzType="mobile" nzTheme="outline"></i>
+                                        <li nz-menu-item (click)="openModal('loginByPhone')">
+                                            <i nz-icon nzType="mobile" nzTheme="outline" ></i>
                                             手机登陆
                                         </li>
-                                        <li nz-menu-item>
-                                            <span nz-icon nzType="user-add" nzTheme="outline"></span>
+                                        <li nz-menu-item (click)="openModal('register')">
+                                            <span nz-icon nzType="user-add" nzTheme="outline" ></span>
                                             注册
                                         </li>
                                     </ul>
@@ -53,7 +53,7 @@
 </div>
 
 <app-mp-player></app-mp-player>
-
 <app-mp-layer-modal>
-    <app-mp-layer-default></app-mp-layer-default>
+    <app-mp-layer-login name="login"></app-mp-layer-login>
+    <app-mp-layer-default (onChangeModalType)="onChangeModalType($event)"></app-mp-layer-default>
 </app-mp-layer-modal>

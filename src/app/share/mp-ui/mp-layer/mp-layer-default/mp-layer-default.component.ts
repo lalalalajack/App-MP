@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-mp-layer-default',
@@ -7,7 +7,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MpLayerDefaultComponent implements OnInit {
-
+  @Output() onChangeModalType = new EventEmitter()
   constructor() { }
 
   ngOnInit(): void {

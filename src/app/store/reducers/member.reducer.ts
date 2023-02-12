@@ -9,7 +9,7 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { SetModalType, SetModalVisible } from '../actions/member.action';
 
-//默认弹窗类型
+//默认弹窗类型(元组)
 export enum ModalTypes {
   Register = 'register',
   LoginByPhone = 'loginByPhone',
