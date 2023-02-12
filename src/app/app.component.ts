@@ -1,16 +1,18 @@
+import { MemberService } from './services/member.service';
+import { LoginParams } from './share/mp-ui/mp-layer/mp-layer-login/mp-layer-login.component';
+/*
+ * @Author: cwj
+ * @Date: 2022-12-09 18:26:10
+ * @LastEditors: cwj
+ * @LastEditTime: 2023-02-13 03:28:53
+ * @Introduce:
+ */
 import { SetModalType } from './store/actions/member.action';
 import { AppStoreModule } from './store/index';
 import { Store } from '@ngrx/store';
 import { ModalTypes } from 'src/app/store/reducers/member.reducer';
 import { SearchResult } from './services/data-types/common.types';
 import { SearchService } from './services/search.service';
-/*
- * @Author: cwj
- * @Date: 2022-12-09 18:26:10
- * @LastEditors: cwj
- * @LastEditTime: 2023-02-12 20:40:32
- * @Introduce:
- */
 import { Component } from '@angular/core';
 import { isEmptyObject } from './utils/tools';
 import { MemberBatchActionsService } from './store/member-batch-actions.service';
@@ -38,7 +40,8 @@ export class AppComponent {
   constructor(
     private SearchServe: SearchService,
     private store$: Store<AppStoreModule>,
-    private memberBatchAction: MemberBatchActionsService
+    private memberBatchAction: MemberBatchActionsService,
+    private memberServe:MemberService
   ) {}
 
   onSearch(keyWords: string) {
@@ -79,12 +82,19 @@ export class AppComponent {
   }
 
   //打开弹窗
-  openModal(type: string) {
+  openModal(type:string) {
     console.log('执行到此',type);
     if (type === 'loginByPhone') {
       this.memberBatchAction.controlModal(true, ModalTypes.LoginByPhone);
     } else if (type === 'register') {
       this.memberBatchAction.controlModal(true, ModalTypes.Register);
     }
+  }
+
+  //登陆
+  onLogin(params:LoginParams){
+    this.memberServe.login(params).subscribe(user=>{
+      console.log('user:',user);
+    })
   }
 }

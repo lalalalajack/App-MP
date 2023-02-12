@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-09 18:26:10
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-11 15:33:07
+ * @LastEditTime: 2023-02-13 02:38:56
  * @Introduce: 
 -->
 <div id="app">
@@ -54,6 +54,6 @@
 
 <app-mp-player></app-mp-player>
 <app-mp-layer-modal>
-    <app-mp-layer-login name="login"></app-mp-layer-login>
+    <app-mp-layer-login name="login" (onLogin)="onLogin($event)" (onChangeModalType)="onChangeModalType($event)"></app-mp-layer-login>
     <app-mp-layer-default (onChangeModalType)="onChangeModalType($event)"></app-mp-layer-default>
 </app-mp-layer-modal>
