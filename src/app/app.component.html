@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-09 18:26:10
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-13 02:38:56
+ * @LastEditTime: 2023-02-14 20:01:12
  * @Introduce: 
 -->
 <div id="app">
@@ -19,7 +19,7 @@
                     <!-- 搜索组件 -->
                     <app-mp-search (onSearch)="onSearch($event)" [searchResult]="searchResult"></app-mp-search>
                     <div class="member">
-                        <div class="no-login">
+                        <div class="no-login" *ngIf="!user else logined">
                             <ul nz-menu nzTheme="dark" nzMode="horizontal">
                                 <li nz-submenu>
                                     <div title>
@@ -28,17 +28,38 @@
                                     </div>
                                     <ul>
                                         <li nz-menu-item (click)="openModal('loginByPhone')">
-                                            <i nz-icon nzType="mobile" nzTheme="outline" ></i>
+                                            <i nz-icon nzType="mobile" nzTheme="outline"></i>
                                             手机登陆
                                         </li>
                                         <li nz-menu-item (click)="openModal('register')">
-                                            <span nz-icon nzType="user-add" nzTheme="outline" ></span>
+                                            <span nz-icon nzType="user-add" nzTheme="outline"></span>
                                             注册
                                         </li>
                                     </ul>
                                 </li>
                             </ul>
                         </div>
+
+                        <ng-template #logined>
+                            <div class="login">
+                                <ul nz-menu nzMode="horizontal" nzTheme="dark">
+                                    <li nz-submenu>
+                                        <div title>
+                                            <nz-avatar nzIcon="user"></nz-avatar>
+                                            <i nz-icon type="down" nzTheme="outline"></i>
+                                        </div>
+                                        <ul>
+                                            <li nz-menu-item>
+                                                <i nz-icon nzType="user" nzTheme="outline"></i>我的主页
+                                            </li>
+                                            <li nz-menu-item (click)="onLogout()">
+                                                <i nz-icon nzType="close-circle" nzTheme="outline" ></i>退出
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </ng-template>
                     </div>
                 </div>
             </div>
@@ -54,6 +75,7 @@
 
 <app-mp-player></app-mp-player>
 <app-mp-layer-modal>
-    <app-mp-layer-login name="login" (onLogin)="onLogin($event)" (onChangeModalType)="onChangeModalType($event)"></app-mp-layer-login>
+    <app-mp-layer-login name="login" (onLogin)="onLogin($event)"
+        (onChangeModalType)="onChangeModalType($event)"></app-mp-layer-login>
     <app-mp-layer-default (onChangeModalType)="onChangeModalType($event)"></app-mp-layer-default>
 </app-mp-layer-modal>

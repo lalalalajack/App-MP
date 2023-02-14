@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2023-02-13 00:18:34
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-13 03:37:05
+ * @LastEditTime: 2023-02-14 20:05:48
  * @Introduce:
  */
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -10,6 +10,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  Input,
   OnInit,
   Output,
 } from '@angular/core';
@@ -28,12 +29,13 @@ export interface LoginParams {
 })
 export class MpLayerLoginComponent implements OnInit {
   formModel: FormGroup;
+  @Input() mpRememberLogin:LoginParams;
   @Output() onChangeModalType = new EventEmitter();
   @Output() onLogin = new EventEmitter<LoginParams>();
   constructor(private fb: FormBuilder) {
     this.formModel = this.fb.group({
-      phone: ['132',[Validators.required,Validators.pattern(/^1\d{10}$/)]],
-      password: ['666',[Validators.required,Validators.minLength(6),Validators.pattern(/^[^<>'\s&quot;]+$/)]],
+      phone: ['15259598649',[Validators.required,Validators.pattern(/^1\d{10}$/)]],
+      password: ['666888',[Validators.required,Validators.minLength(6),Validators.pattern(/^[^<>'\s&quot;]+$/)]],
       remember: [false],
     });
   }
@@ -47,7 +49,8 @@ export class MpLayerLoginComponent implements OnInit {
     const model = this.formModel;
     if (model.valid) {
       //表单通过验证
-      console.log('value:', model.value);
+      //console.log('value:', model.value);
+      this.onLogin.emit(model.value);
     }
   }
 }

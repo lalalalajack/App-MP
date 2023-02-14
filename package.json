@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --proxy-config proxy.config.json",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
@@ -25,7 +25,9 @@
     "@better-scroll/scroll-bar": "^2.5.0",
     "@ngrx/store": "^14.2.0",
     "@ngrx/store-devtools": "^14.2.0",
+    "express": "^4.18.2",
     "minireset.css": "^0.0.7",
+    "mysql": "^2.18.1",
     "ng-zorro-antd": "^14.2.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",

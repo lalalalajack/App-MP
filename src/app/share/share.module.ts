@@ -21,6 +21,7 @@ import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzMessageModule } from 'ng-zorro-antd/message';
+import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 
 @NgModule({
   imports: [
@@ -37,7 +38,8 @@ import { NzMessageModule } from 'ng-zorro-antd/message';
     NzRadioModule,
     NzPaginationModule,
     NzTagModule,
-    NzTableModule
+    NzTableModule,
+    NzAvatarModule
   ],
   exports:[
     CommonModule,
@@ -53,7 +55,8 @@ import { NzMessageModule } from 'ng-zorro-antd/message';
     NzRadioModule,
     NzPaginationModule,
     NzTagModule,
-    NzTableModule
+    NzTableModule,
+    NzAvatarModule
   ],
 })
 export class ShareModule { }
