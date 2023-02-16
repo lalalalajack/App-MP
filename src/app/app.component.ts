@@ -7,7 +7,7 @@ import { LoginParams } from './share/mp-ui/mp-layer/mp-layer-login/mp-layer-logi
  * @Author: cwj
  * @Date: 2022-12-09 18:26:10
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-17 02:09:41
+ * @LastEditTime: 2023-02-17 04:37:36
  * @Introduce:
  */
 import { SetModalType, SetUserId } from './store/actions/member.action';
@@ -21,6 +21,7 @@ import { isEmptyObject } from './utils/tools';
 import { MemberBatchActionsService } from './store/member-batch-actions.service';
 import { User } from './services/data-types/member.types';
 import { codeJson } from './utils/base64';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -165,5 +166,23 @@ export class AppComponent {
     this.store$.dispatch(SetUserId({ id: '' }));
     this.alertMessage('success', '退出成功');
     //localStorage.removeItem('mpUserId');
+  }
+
+  //注册
+  onRegister(model: FormGroup) {
+    const params = model.value;
+    this.memberServe.registerUser(params).subscribe(
+      (res: any) => {
+        console.log('res1',res);
+        this.messageServe.success('注册成功');
+        this.memberBatchAction.controlModal(false);
+      },
+      (err: any) => {
+        if (err.error.message === '该号码已被注册') {
+          model.get('phone').setErrors({ registered: true });
+        }
+        this.messageServe.error('注册失败');
+      }
+    );
   }
 }

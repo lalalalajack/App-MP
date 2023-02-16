@@ -1,8 +1,9 @@
+import { RegisterParams } from './../share/mp-ui/mp-layer/mp-layer-register/mp-layer-register.component';
 /*
  * @Author: cwj
  * @Date: 2022-12-09 21:49:47
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-16 20:12:39
+ * @LastEditTime: 2023-02-17 04:17:32
  * @Introduce:
  */
 import { LoginParams } from './../share/mp-ui/mp-layer/mp-layer-login/mp-layer-login.component';
@@ -47,9 +48,16 @@ export class MemberService {
 
   //获取用户详细信息
   getUserDetail(id: string): Observable<User> {
-    const params = new HttpParams().set('phone',id)
-    return this.http.get('api/detail', { params })
-    .pipe(map((res) => res as User));
+    const params = new HttpParams().set('phone', id);
+    return this.http
+      .get('api/detail', { params })
+      .pipe(map((res) => res as User));
   }
 
+  // 注册用户
+  registerUser(formValue: RegisterParams) {
+    const phone = formValue.phone;
+    const password = formValue.password;
+    return this.http.post(`api/register`, {phone,password});
+  }
 }

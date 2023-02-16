@@ -20,12 +20,14 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzListModule } from 'ng-zorro-antd/list';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
+import { MpLayerRegisterComponent } from './mp-layer-register/mp-layer-register.component';
 
 @NgModule({
   declarations: [
     MpLayerModalComponent,
     MpLayerDefaultComponent,
     MpLayerLoginComponent,
+    MpLayerRegisterComponent,
   ],
   imports: [
     CommonModule,
@@ -45,6 +47,7 @@ import { NzAlertModule } from 'ng-zorro-antd/alert';
     MpLayerModalComponent,
     MpLayerDefaultComponent,
     MpLayerLoginComponent,
+    MpLayerRegisterComponent,
   ],
 })
 export class MpLayerModule {}

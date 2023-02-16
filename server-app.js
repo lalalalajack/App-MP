@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2023-02-13 03:41:10
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-16 19:18:30
+ * @LastEditTime: 2023-02-17 04:06:47
  * @Introduce:
  */
 // 导入Express模块，并创建Express应用程序对象
@@ -49,24 +49,26 @@ app.post("/api/login", function (req, res) {
 });
 
 //注册
-app.post("/api/register", function (req, res) {
-  var account = req.body.account;
-  var pwd = req.body.pwd;
-  process(req, res, function () {
-    checkNotNull(account, "账号不为空");
-    checkNotNull(pwd, "密码不为空");
-    let exist = users.find((x) => x.account === account);
-    if (!!exist) throw new Error("账号已存在");
-    users.push({
-      id: users.length,
-      account,
-      pwd,
-      isTeacher: false,
-    });
-    res.json({ result: true, msg: "注册成功" });
+app.post("/api/register", (req, res) => {
+  const phone = req.body.phone;
+  const password = req.body.password;
+  const defaultNickname = "User" + Math.floor(Math.random() * 10000);
+  con.query("SELECT * FROM user WHERE phone = ?", phone, (err, result) => {
+    if (err) throw err;
+    if (result.length > 0) {
+      res.status(400).send({ message: "该号码已被注册" });
+    } else {
+      const sql =
+        "INSERT INTO user (phone, password, nickname) VALUES (?, ?, ?)";
+        con.query(sql, [phone, password, defaultNickname], (err, result) => {
+        if (err) throw err;
+        res.send({ message: "注册成功" });
+      });
+    }
   });
 });
 
+  
 //通过ID获取详细信息
 app.get("/api/detail", function (req, res) {
   const phone = req.query.phone;
@@ -82,7 +84,6 @@ app.get("/api/detail", function (req, res) {
     }
   });
 });
-
 
 /** 实现统一的异常处理，catchFun参数可选 */
 function process(req, res, fun, catchFun) {
