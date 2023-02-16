@@ -14,6 +14,7 @@
  */
 import { isPlatformBrowser } from '@angular/common';
 import { InjectionToken, NgModule, PLATFORM_ID } from '@angular/core';
+import { httpInterceptorProvides } from './http-interceptors';
 
 export const API_CONFIG = new InjectionToken('ApiConfigToken');
 export const WINDOW = new InjectionToken('Window');
@@ -23,7 +24,8 @@ export const WINDOW = new InjectionToken('Window');
   imports: [],
   providers: [
     { provide: API_CONFIG, useValue: 'http://localhost:3000/' },
-    { provide: WINDOW, useValue: 'Window' }
+    { provide: WINDOW, useValue: 'Window' },
+    httpInterceptorProvides
   ],
 })
 export class ServicesModule {}
