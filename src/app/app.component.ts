@@ -7,10 +7,10 @@ import { LoginParams } from './share/mp-ui/mp-layer/mp-layer-login/mp-layer-logi
  * @Author: cwj
  * @Date: 2022-12-09 18:26:10
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-16 19:29:20
+ * @LastEditTime: 2023-02-17 02:09:41
  * @Introduce:
  */
-import { SetModalType } from './store/actions/member.action';
+import { SetModalType, SetUserId } from './store/actions/member.action';
 import { AppStoreModule } from './store/index';
 import { Store } from '@ngrx/store';
 import { ModalTypes } from 'src/app/store/reducers/member.reducer';
@@ -42,6 +42,7 @@ export class AppComponent {
 
   searchResult: SearchResult; //保存当前的搜索返回结果
   user: User;
+  mpRememberLogin: LoginParams;
 
   constructor(
     private SearchServe: SearchService,
@@ -52,16 +53,22 @@ export class AppComponent {
     private storageServe: StorageService
   ) {
     this.memberServe.helloWorld();
+
     //const userId = localStorage.getItem('mpUserId');
     const userId = this.storageServe.getStorage('mpUserId');
     if (userId) {
-      this.memberServe.getUserInfo(userId).subscribe((user) => {
+      this.store$.dispatch(SetUserId({ id: userId }));
+      this.memberServe.getUserDetail(userId).subscribe((user) => {
         this.user = user;
       });
     }
 
     //const mpRememberLogin = localStorage.getItem('mpRememberLogin');
     const mpRememberLogin = this.storageServe.getStorage('mpRememberLogin');
+
+    if (mpRememberLogin) {
+      this.mpRememberLogin = JSON.parse(mpRememberLogin);
+    }
   }
 
   onSearch(keyWords: string) {
@@ -103,7 +110,6 @@ export class AppComponent {
 
   //打开弹窗
   openModal(type: string) {
-    console.log('执行到此', type);
     if (type === 'loginByPhone') {
       this.memberBatchAction.controlModal(true, ModalTypes.LoginByPhone);
     } else if (type === 'register') {
@@ -124,6 +130,7 @@ export class AppComponent {
           key: 'mpUserId',
           value: user.phone,
         });
+        this.store$.dispatch(SetUserId({ id: user.phone.toString() }));
 
         if (params.remember) {
           // localStorage.setItem(
@@ -136,7 +143,7 @@ export class AppComponent {
           });
         } else {
           //localStorage.removeItem('mpRememberLogin');
-          this.storageServe.removeStorage('mpUserId');
+          this.storageServe.removeStorage('mpRememberLogin');
         }
       },
       (error) => {
@@ -154,7 +161,9 @@ export class AppComponent {
   //登出
   onLogout() {
     this.user = null;
+    this.storageServe.removeStorage('mpUserId');
+    this.store$.dispatch(SetUserId({ id: '' }));
     this.alertMessage('success', '退出成功');
-    localStorage.removeItem('mpUserId');
+    //localStorage.removeItem('mpUserId');
   }
 }

@@ -55,7 +55,9 @@
 
 
             <div class="right">
-                <app-member-card (openModal)="openModal()"></app-member-card>
+
+                <app-member-card [user]="user" (openModal)="openModal()"></app-member-card>
+
                 <div class="settled-singer">
                     <div class="tit"><b>入驻歌手</b></div>
                     <div class="list">

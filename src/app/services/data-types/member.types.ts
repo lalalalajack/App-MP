@@ -12,10 +12,6 @@ export interface User {
   nickname: string;
 }
 
-// 登出返回
-export interface SampleBack extends AnyJson {
-  code: number;
-}
 // 加密数据
 export interface AnyJson {
   [key: string]: any;

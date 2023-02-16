@@ -1,8 +1,9 @@
+import { SetUserId } from './../actions/member.action';
 /*
  * @Author: cwj
  * @Date: 2023-02-11 15:37:45
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-11 18:09:49
+ * @LastEditTime: 2023-02-17 01:36:54
  * @Introduce:
  */
 
@@ -15,18 +16,20 @@ export enum ModalTypes {
   LoginByPhone = 'loginByPhone',
   Share = 'share',
   Like = 'like',
-  Default = 'default'
+  Default = 'default',
 }
 
 export type MemberState = {
   modalVisible: boolean; //显隐状态
   modalType: ModalTypes; //弹窗类型
+  userId: string; //用户id
 };
 
 //初始数据格式
 export const initialState: MemberState = {
-  modalVisible: false, 
+  modalVisible: false,
   modalType: ModalTypes.Default,
+  userId: '',
 };
 // 注册动作
 const reducer = createReducer(
@@ -35,7 +38,8 @@ const reducer = createReducer(
     ...state,
     modalVisible,
   })),
-  on(SetModalType, (state, { modalType }) => ({ ...state, modalType }))
+  on(SetModalType, (state, { modalType }) => ({ ...state, modalType })),
+  on(SetUserId, (state, { id }) => ({ ...state, userId:id }))
 );
 
 export function memberReducer(state: MemberState, action: Action) {

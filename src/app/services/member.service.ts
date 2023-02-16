@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-09 21:49:47
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-16 15:03:38
+ * @LastEditTime: 2023-02-16 20:12:39
  * @Introduce:
  */
 import { LoginParams } from './../share/mp-ui/mp-layer/mp-layer-login/mp-layer-login.component';
@@ -46,7 +46,7 @@ export class MemberService {
   }
 
   //获取用户详细信息
-  getUserInfo(id: string): Observable<User> {
+  getUserDetail(id: string): Observable<User> {
     const params = new HttpParams().set('phone',id)
     return this.http.get('api/detail', { params })
     .pipe(map((res) => res as User));
