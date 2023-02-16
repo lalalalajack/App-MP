@@ -2,18 +2,16 @@
  * @Author: cwj
  * @Date: 2022-12-09 21:49:47
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-14 19:39:42
+ * @LastEditTime: 2023-02-16 15:03:38
  * @Introduce:
  */
 import { LoginParams } from './../share/mp-ui/mp-layer/mp-layer-login/mp-layer-login.component';
 import { Inject, Injectable } from '@angular/core';
-import { Observable, catchError, tap, throwError } from 'rxjs';
+import { Observable } from 'rxjs';
 import { API_CONFIG, ServicesModule } from './services.module';
-import { Banner, HotTag, SongSheet } from './data-types/common.types';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { map } from 'rxjs';
 import { User } from './data-types/member.types';
-import * as qs from 'qs';
 
 export class Hello {
   msg?: string;
@@ -54,5 +52,4 @@ export class MemberService {
     .pipe(map((res) => res as User));
   }
 
-  //
 }

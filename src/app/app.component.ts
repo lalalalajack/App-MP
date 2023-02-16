@@ -1,3 +1,4 @@
+import { StorageService } from './services/storage.service';
 import { NzMessageModule, NzMessageService } from 'ng-zorro-antd/message';
 import { Observable } from 'rxjs';
 import { MemberService } from './services/member.service';
@@ -6,7 +7,7 @@ import { LoginParams } from './share/mp-ui/mp-layer/mp-layer-login/mp-layer-logi
  * @Author: cwj
  * @Date: 2022-12-09 18:26:10
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-14 20:07:14
+ * @LastEditTime: 2023-02-16 19:29:20
  * @Introduce:
  */
 import { SetModalType } from './store/actions/member.action';
@@ -19,6 +20,7 @@ import { Component } from '@angular/core';
 import { isEmptyObject } from './utils/tools';
 import { MemberBatchActionsService } from './store/member-batch-actions.service';
 import { User } from './services/data-types/member.types';
+import { codeJson } from './utils/base64';
 
 @Component({
   selector: 'app-root',
@@ -46,17 +48,20 @@ export class AppComponent {
     private store$: Store<AppStoreModule>,
     private memberBatchAction: MemberBatchActionsService,
     private memberServe: MemberService,
-    private messageServe: NzMessageService
+    private messageServe: NzMessageService,
+    private storageServe: StorageService
   ) {
     this.memberServe.helloWorld();
-    const userId = localStorage.getItem('mpUserId');
+    //const userId = localStorage.getItem('mpUserId');
+    const userId = this.storageServe.getStorage('mpUserId');
     if (userId) {
       this.memberServe.getUserInfo(userId).subscribe((user) => {
         this.user = user;
       });
     }
 
-    const mpRememberLogin = localStorage.getItem('mpUserId');
+    //const mpRememberLogin = localStorage.getItem('mpRememberLogin');
+    const mpRememberLogin = this.storageServe.getStorage('mpRememberLogin');
   }
 
   onSearch(keyWords: string) {
@@ -72,11 +77,11 @@ export class AppComponent {
 
   // 关键字高亮
   private highlightKeyWords(
-    kewwords: string,
+    keywords: string,
     result: SearchResult
   ): SearchResult {
     if (!isEmptyObject(result)) {
-      const reg = new RegExp(kewwords, 'ig');
+      const reg = new RegExp(keywords, 'ig');
       ['artists', 'playlists', 'songs'].forEach((type) => {
         if (result[type]) {
           result[type].forEach((item) => {
@@ -114,11 +119,24 @@ export class AppComponent {
         this.user = user;
         this.memberBatchAction.controlModal(false);
         this.alertMessage('success', '登录成功');
-        localStorage.setItem('mpUserId', user.phone);
+        //localStorage.setItem('mpUserId', user.phone);
+        this.storageServe.setStorage({
+          key: 'mpUserId',
+          value: user.phone,
+        });
+
         if (params.remember) {
-          localStorage.setItem('mpRememberLogin', JSON.stringify(params));
+          // localStorage.setItem(
+          //   'mpRememberLogin',
+          //   JSON.stringify(codeJson(params))
+          // );
+          this.storageServe.setStorage({
+            key: 'mpRememberLogin',
+            value: JSON.stringify(codeJson(params)),
+          });
         } else {
-          localStorage.removeItem('mpRememberLogin');
+          //localStorage.removeItem('mpRememberLogin');
+          this.storageServe.removeStorage('mpUserId');
         }
       },
       (error) => {

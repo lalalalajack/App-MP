@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2023-02-13 03:41:10
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-14 19:51:52
+ * @LastEditTime: 2023-02-16 19:18:30
  * @Introduce:
  */
 // 导入Express模块，并创建Express应用程序对象
@@ -83,19 +83,6 @@ app.get("/api/detail", function (req, res) {
   });
 });
 
-//查询数据
-app.get("/api/select/users", function (req, res) {
-  var sql = "select * from users"; //sql查询语句：查找msg表中所有数据
-  con.query(sql, function (err, result) {
-    //连接数据库 传入sql语句 回调函数得到结果
-    try {
-      res.send(result); //查询结果响应给请求方
-      users = result;
-    } catch (err) {
-      console.log("查询失败");
-    }
-  });
-});
 
 /** 实现统一的异常处理，catchFun参数可选 */
 function process(req, res, fun, catchFun) {
