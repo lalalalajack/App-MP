@@ -1,15 +1,16 @@
-import { StorageService } from './services/storage.service';
-import { NzMessageModule, NzMessageService } from 'ng-zorro-antd/message';
-import { Observable } from 'rxjs';
-import { MemberService } from './services/member.service';
-import { LoginParams } from './share/mp-ui/mp-layer/mp-layer-login/mp-layer-login.component';
 /*
  * @Author: cwj
  * @Date: 2022-12-09 18:26:10
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-17 04:37:36
+ * @LastEditTime: 2023-02-17 15:51:51
  * @Introduce:
  */
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { StorageService } from './services/storage.service';
+import { NzMessageModule, NzMessageService } from 'ng-zorro-antd/message';
+import { Observable, filter, map, mergeMap } from 'rxjs';
+import { MemberService } from './services/member.service';
+import { LoginParams } from './share/mp-ui/mp-layer/mp-layer-login/mp-layer-login.component';
 import { SetModalType, SetUserId } from './store/actions/member.action';
 import { AppStoreModule } from './store/index';
 import { Store } from '@ngrx/store';
@@ -22,6 +23,7 @@ import { MemberBatchActionsService } from './store/member-batch-actions.service'
 import { User } from './services/data-types/member.types';
 import { codeJson } from './utils/base64';
 import { FormGroup } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -44,6 +46,8 @@ export class AppComponent {
   searchResult: SearchResult; //保存当前的搜索返回结果
   user: User;
   mpRememberLogin: LoginParams;
+  navEnd: Observable<NavigationEnd>; //表示当导航成功结束时触发的事件。
+  routeTitle = ''; //变量保存title
 
   constructor(
     private SearchServe: SearchService,
@@ -51,7 +55,10 @@ export class AppComponent {
     private memberBatchAction: MemberBatchActionsService,
     private memberServe: MemberService,
     private messageServe: NzMessageService,
-    private storageServe: StorageService
+    private storageServe: StorageService,
+    private router: Router,
+    private activateRoute: ActivatedRoute,
+    private titleServe: Title
   ) {
     this.memberServe.helloWorld();
 
@@ -70,6 +77,29 @@ export class AppComponent {
     if (mpRememberLogin) {
       this.mpRememberLogin = JSON.parse(mpRememberLogin);
     }
+    this.navEnd = <Observable<NavigationEnd>>(
+      this.router.events.pipe(filter((evt) => evt instanceof NavigationEnd))
+    );
+    this.setTitle();
+  }
+
+  //设置页面标题
+  private setTitle() {
+    this.navEnd
+      .pipe(
+        map(() => this.activateRoute),
+        map((route: ActivatedRoute) => {
+          while (route.firstChild) {
+            route = route.firstChild;
+          }
+          return route;
+        }),
+        mergeMap((route) => route.data)
+      )
+      .subscribe((data) => {
+        this.routeTitle = data['title'];
+        this.titleServe.setTitle(this.routeTitle);
+      });
   }
 
   onSearch(keyWords: string) {
@@ -173,7 +203,7 @@ export class AppComponent {
     const params = model.value;
     this.memberServe.registerUser(params).subscribe(
       (res: any) => {
-        console.log('res1',res);
+        console.log('res1', res);
         this.messageServe.success('注册成功');
         this.memberBatchAction.controlModal(false);
       },
