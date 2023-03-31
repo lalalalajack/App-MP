@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2023-02-13 00:18:34
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-16 18:59:24
+ * @LastEditTime: 2023-03-31 22:49:25
  * @Introduce:
  */
 import { SimpleChanges, OnChanges } from '@angular/core';
@@ -15,7 +15,6 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { codeJson } from 'src/app/utils/base64';
 
 export interface LoginParams {
   phone: string;
@@ -58,7 +57,7 @@ export class MpLayerLoginComponent implements OnInit, OnChanges {
       let password = '';
       let remember = false;
       if (userLoginParams.currentValue) {
-        const value = codeJson(userLoginParams.currentValue, 'decode');
+        const value =userLoginParams.currentValue;
         phone = value['phone'];
         password = value['password'];
         remember = value['remember'];

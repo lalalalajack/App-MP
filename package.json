@@ -25,7 +25,6 @@
     "@better-scroll/scroll-bar": "^2.5.0",
     "@ngrx/store": "^14.2.0",
     "@ngrx/store-devtools": "^14.2.0",
-    "js-base64": "^2.5.1",
     "express": "^4.18.2",
     "minireset.css": "^0.0.7",
     "mysql": "^2.18.1",

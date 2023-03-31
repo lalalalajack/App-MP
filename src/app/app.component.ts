@@ -2,7 +2,7 @@
  * @Author: cwj
  * @Date: 2022-12-09 18:26:10
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-17 15:51:51
+ * @LastEditTime: 2023-03-31 22:49:02
  * @Introduce:
  */
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
@@ -21,7 +21,6 @@ import { Component } from '@angular/core';
 import { isEmptyObject } from './utils/tools';
 import { MemberBatchActionsService } from './store/member-batch-actions.service';
 import { User } from './services/data-types/member.types';
-import { codeJson } from './utils/base64';
 import { FormGroup } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 
@@ -164,13 +163,9 @@ export class AppComponent {
         this.store$.dispatch(SetUserId({ id: user.phone.toString() }));
 
         if (params.remember) {
-          // localStorage.setItem(
-          //   'mpRememberLogin',
-          //   JSON.stringify(codeJson(params))
-          // );
           this.storageServe.setStorage({
             key: 'mpRememberLogin',
-            value: JSON.stringify(codeJson(params)),
+            value: JSON.stringify(params),
           });
         } else {
           //localStorage.removeItem('mpRememberLogin');
