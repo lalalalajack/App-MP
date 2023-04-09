@@ -59,7 +59,6 @@ export class AppComponent {
     private activateRoute: ActivatedRoute,
     private titleServe: Title
   ) {
-    this.memberServe.helloWorld();
 
     //const userId = localStorage.getItem('mpUserId');
     const userId = this.storageServe.getStorage('mpUserId');

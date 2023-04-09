@@ -2,15 +2,8 @@
  * @Author: cwj
  * @Date: 2022-12-09 19:22:54
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-16 19:08:18
+ * @LastEditTime: 2023-03-31 23:02:19
  * @Introduce: 
- */
-/*
- * @Author: cwj
- * @Date: 2022-12-09 19:22:54
- * @LastEditors: cwj
- * @LastEditTime: 2023-02-11 23:26:57
- * @Introduce:
  */
 import { isPlatformBrowser } from '@angular/common';
 import { InjectionToken, NgModule, PLATFORM_ID } from '@angular/core';
@@ -23,7 +16,7 @@ export const WINDOW = new InjectionToken('Window');
   declarations: [],
   imports: [],
   providers: [
-    { provide: API_CONFIG, useValue: 'http://localhost:3000/' },
+    { provide: API_CONFIG, useValue: 'http://47.120.13.63:3000/' },
     { provide: WINDOW, useValue: 'Window' },
     httpInterceptorProvides
   ],

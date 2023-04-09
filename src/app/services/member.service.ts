@@ -3,7 +3,7 @@ import { RegisterParams } from './../share/mp-ui/mp-layer/mp-layer-register/mp-l
  * @Author: cwj
  * @Date: 2022-12-09 21:49:47
  * @LastEditors: cwj
- * @LastEditTime: 2023-02-17 04:17:32
+ * @LastEditTime: 2023-04-09 20:00:10
  * @Introduce:
  */
 import { LoginParams } from './../share/mp-ui/mp-layer/mp-layer-login/mp-layer-login.component';
@@ -14,9 +14,6 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { map } from 'rxjs';
 import { User } from './data-types/member.types';
 
-export class Hello {
-  msg?: string;
-}
 
 @Injectable({
   providedIn: ServicesModule,
@@ -38,13 +35,6 @@ export class MemberService {
       .pipe(map((res) => res as User));
   }
 
-  helloWorld() {
-    this.http
-      .post<Hello>('api/helloWorld', { msg: 'hello world from client' })
-      .subscribe((msg) => {
-        console.log('msg:', msg);
-      });
-  }
 
   //获取用户详细信息
   getUserDetail(id: string): Observable<User> {
